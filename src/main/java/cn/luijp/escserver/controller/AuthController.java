@@ -41,7 +41,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseDto<Object> login(Auth auth, HttpServletResponse response) {
+    public ResponseDto<Object> login(@RequestBody Auth auth, HttpServletResponse response) {
         Login login = authControllerService.login(auth.getUsername(), auth.getPassword());
         if(login == null){
             return ResponseDto.error(-1, "Login failed");

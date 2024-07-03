@@ -51,6 +51,7 @@ public class AuthControllerServiceImpl implements AuthControllerService {
             login.setUuid(uuid);
             login.setToken(token);
             login.setLoginTime(LocalDateTime.now());
+            loginService.save(login);
             return login;
         }
     }

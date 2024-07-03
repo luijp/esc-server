@@ -111,7 +111,6 @@ public class PostsControllerServiceImpl implements PostsControllerService {
             pwt.setSummary(item.getSummary());
             pwt.setCreateTime(item.getCreateTime());
             pwt.setUpdateTime(item.getUpdateTime());
-            pwt.setSlug(item.getSlug());
             pwt.setVisible(item.getVisible());
             pwt.setEncrypt(item.getEncrypt());
             pwt.setType(item.getType());
