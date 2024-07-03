@@ -1,5 +1,6 @@
 package cn.luijp.escserver.service.impl;
 
+import cn.luijp.escserver.cache.CacheManager;
 import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.PostTags;
 import cn.luijp.escserver.model.entity.Tags;
@@ -21,10 +22,13 @@ public class TagsControllerServiceImpl implements TagsControllerService {
 
     private final IPostTagsService postTagsService;
 
+    private final CacheManager cacheManager;
+
     @Autowired
-    public TagsControllerServiceImpl(ITagsService tagsService, IPostTagsService postTagsService) {
+    public TagsControllerServiceImpl(ITagsService tagsService, IPostTagsService postTagsService, CacheManager cacheManager) {
         this.tagsService = tagsService;
         this.postTagsService = postTagsService;
+        this.cacheManager = cacheManager;
     }
 
     public List<Tags> getAllTags(){
@@ -36,7 +40,9 @@ public class TagsControllerServiceImpl implements TagsControllerService {
             return delTag(tag);
         }
         try{
-            return tagsService.saveOrUpdate(tag);
+            boolean status = tagsService.saveOrUpdate(tag);
+            cacheManager.init();
+            return status;
         }catch (Exception ex){
             return false;
         }
@@ -54,6 +60,7 @@ public class TagsControllerServiceImpl implements TagsControllerService {
             QueryWrapper<PostTags> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("tag_id", tagId);
             postTagsService.remove(queryWrapper);
+            cacheManager.init();
             return true;
         }catch (Exception ex){
             return false;

@@ -1,5 +1,6 @@
 package cn.luijp.escserver.service.impl;
 
+import cn.luijp.escserver.cache.CacheManager;
 import cn.luijp.escserver.model.entity.Categories;
 import cn.luijp.escserver.model.entity.PostCategories;
 import cn.luijp.escserver.model.entity.Tags;
@@ -22,10 +23,15 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
 
     private final IPostCategoriesService postCategoriesService;
 
+    private final CacheManager cacheManager;
+
     @Autowired
-    public CategoriesControllerServiceImpl(ICategoriesService categoriesService,IPostCategoriesService postCategoriesService) {
+    public CategoriesControllerServiceImpl(ICategoriesService categoriesService,
+                                           IPostCategoriesService postCategoriesService,
+                                           CacheManager cacheManager) {
         this.categoriesService = categoriesService;
         this.postCategoriesService = postCategoriesService;
+        this.cacheManager = cacheManager;
     }
 
     public List<Categories> getAllCategories() {
@@ -37,7 +43,9 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
             return delCategory(category);
         }
         try{
-            return categoriesService.saveOrUpdate(category);
+            boolean status = categoriesService.saveOrUpdate(category);
+            cacheManager.init();
+            return status;
         }catch (Exception ex){
             return false;
         }
@@ -54,6 +62,7 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
             QueryWrapper<PostCategories> wrapper = new QueryWrapper<>();
             wrapper.eq("category_id", categoryId);
             postCategoriesService.remove(wrapper);
+            cacheManager.init();
             return true;
 
         }catch (Exception ex){
