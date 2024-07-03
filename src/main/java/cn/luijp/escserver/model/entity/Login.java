@@ -12,9 +12,7 @@ import java.time.LocalDateTime;
 @Data
 public class Login {
 
-    @Setter(lombok.AccessLevel.NONE)
-    @TableId(type = IdType.AUTO)
-    private Integer id;
+    private String uuid;
 
     private String token;
 

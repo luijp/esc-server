@@ -1,5 +1,6 @@
 package cn.luijp.escserver;
 
+import cn.luijp.escserver.util.JwtUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

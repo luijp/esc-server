@@ -12,6 +12,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseDto<Object> globalException(Exception ex) {
         log.error(ex.getMessage());
+        ex.printStackTrace();
         return ResponseDto.error(-1, "unknown exception");
     }
 }
