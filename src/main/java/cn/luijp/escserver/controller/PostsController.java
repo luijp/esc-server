@@ -72,7 +72,6 @@ public class PostsController {
     }
     /*
      * todoList:
-     * get tags and category when get single post
      * get page api
      */
 }

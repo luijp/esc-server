@@ -24,6 +24,11 @@ public class TagsController {
         return ResponseDto.successWithData(tagsControllerService.getAllTags());
     }
 
+    @GetMapping("/get/{post_id}")
+    public ResponseDto<List<Tags>> getTagsByPostId(@PathVariable int post_id){
+        return ResponseDto.successWithData(tagsControllerService.getTagsByPostId(post_id));
+    }
+
     @PostMapping("/update")
     public ResponseDto<Boolean> updateTag(@RequestBody Tags tag){
         Boolean status = tagsControllerService.updateTag(tag);

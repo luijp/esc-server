@@ -1,8 +1,11 @@
 package cn.luijp.escserver.service.impl;
 
 import cn.luijp.escserver.cache.CacheManager;
+import cn.luijp.escserver.cache.CategoriesCache;
+import cn.luijp.escserver.cache.TagsCache;
 import cn.luijp.escserver.model.entity.Categories;
 import cn.luijp.escserver.model.entity.PostCategories;
+import cn.luijp.escserver.model.entity.PostTags;
 import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.service.CategoriesControllerService;
 import cn.luijp.escserver.service.ICategoriesService;
@@ -13,6 +16,7 @@ import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -70,5 +74,16 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
         }
 
 
+    }
+
+    public List<Categories> getCategoriesByPostId(Integer postId) {
+        QueryWrapper<PostCategories> postCategoriesQueryWrapper = new QueryWrapper<>();
+        postCategoriesQueryWrapper.eq("post_id", postId);
+        List<PostCategories> list = postCategoriesService.list(postCategoriesQueryWrapper);
+        List<Categories> categories = new ArrayList<>();
+        list.forEach(item->{
+            categories.add(CategoriesCache.CategoriesMap.get(item.getCategoryId()));
+        });
+        return categories;
     }
 }

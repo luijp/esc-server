@@ -2,6 +2,7 @@ package cn.luijp.escserver.controller;
 
 import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.Categories;
+import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.service.CategoriesControllerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,11 @@ public class CategoriesController {
         }else{
             return ResponseDto.error(-1, "Category update failed");
         }
+    }
+
+    @GetMapping("/get/{post_id}")
+    public ResponseDto<List<Categories>> getCategoriesByPostId(@PathVariable int post_id){
+        return ResponseDto.successWithData(categoriesControllerService.getCategoriesByPostId(post_id));
     }
 
     @PostMapping("/del")

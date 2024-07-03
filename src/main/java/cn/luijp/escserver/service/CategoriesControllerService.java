@@ -14,4 +14,6 @@ public interface CategoriesControllerService {
     public Boolean delCategory(Categories category);
 
     public Boolean delCategory(Integer categoryId);
+
+    public List<Categories> getCategoriesByPostId(Integer postId);
 }

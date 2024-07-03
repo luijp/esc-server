@@ -13,4 +13,6 @@ public interface TagsControllerService {
     public Boolean delTag(Tags tag);
 
     public Boolean delTag(Integer tagId);
+
+    public List<Tags> getTagsByPostId(Integer postId);
 }
