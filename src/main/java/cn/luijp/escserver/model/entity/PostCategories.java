@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @TableName("post_categories")
 @Data
-public class PostCategories{
+public class PostCategories {
 
     @Setter(lombok.AccessLevel.NONE)
     private Integer id;
