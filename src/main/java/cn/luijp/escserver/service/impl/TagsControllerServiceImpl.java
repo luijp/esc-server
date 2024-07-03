@@ -2,7 +2,6 @@ package cn.luijp.escserver.service.impl;
 
 import cn.luijp.escserver.cache.CacheManager;
 import cn.luijp.escserver.cache.TagsCache;
-import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.PostTags;
 import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.service.IPostTagsService;
@@ -12,7 +11,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,38 +31,38 @@ public class TagsControllerServiceImpl implements TagsControllerService {
         this.cacheManager = cacheManager;
     }
 
-    public List<Tags> getAllTags(){
+    public List<Tags> getAllTags() {
         return tagsService.list();
     }
 
     public Boolean updateTag(Tags tag) {
-        if(Objects.equals(tag.getName(), "")){
+        if (Objects.equals(tag.getName(), "")) {
             return delTag(tag);
         }
-        try{
+        try {
             boolean status = tagsService.saveOrUpdate(tag);
             cacheManager.init();
             return status;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return false;
         }
 
     }
 
-    public Boolean delTag(Tags tag){
+    public Boolean delTag(Tags tag) {
         return delTag(tag.getId());
 
     }
 
-    public Boolean delTag(Integer tagId){
-        try{
+    public Boolean delTag(Integer tagId) {
+        try {
             tagsService.removeById(tagId);
             QueryWrapper<PostTags> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("tag_id", tagId);
             postTagsService.remove(queryWrapper);
             cacheManager.init();
             return true;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return false;
         }
     }
@@ -74,7 +72,7 @@ public class TagsControllerServiceImpl implements TagsControllerService {
         postTagsQueryWrapper.eq("post_id", postId);
         List<PostTags> list = postTagsService.list(postTagsQueryWrapper);
         List<Tags> tags = new ArrayList<>();
-        list.forEach(item->{
+        list.forEach(item -> {
             tags.add(TagsCache.tagsMap.get(item.getTagId()));
         });
         return tags;

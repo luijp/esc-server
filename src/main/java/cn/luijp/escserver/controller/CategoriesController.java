@@ -2,7 +2,6 @@ package cn.luijp.escserver.controller;
 
 import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.Categories;
-import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.service.CategoriesControllerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,41 +20,41 @@ public class CategoriesController {
     }
 
     @GetMapping("/")
-    public ResponseDto<List<Categories>> getCategories(){
+    public ResponseDto<List<Categories>> getCategories() {
         return ResponseDto.successWithData(categoriesControllerService.getAllCategories());
     }
 
     @PostMapping("/update")
-    public ResponseDto<Boolean> updateCategory(@RequestBody Categories categories){
+    public ResponseDto<Boolean> updateCategory(@RequestBody Categories categories) {
         Boolean status = categoriesControllerService.updateCategory(categories);
-        if(status){
+        if (status) {
             return ResponseDto.success();
-        }else{
+        } else {
             return ResponseDto.error(-1, "Category update failed");
         }
     }
 
     @GetMapping("/get/{post_id}")
-    public ResponseDto<List<Categories>> getCategoriesByPostId(@PathVariable int post_id){
+    public ResponseDto<List<Categories>> getCategoriesByPostId(@PathVariable int post_id) {
         return ResponseDto.successWithData(categoriesControllerService.getCategoriesByPostId(post_id));
     }
 
     @PostMapping("/del")
-    public ResponseDto<Boolean> delCategory(@RequestBody Categories categories){
+    public ResponseDto<Boolean> delCategory(@RequestBody Categories categories) {
         Boolean status = categoriesControllerService.delCategory(categories);
-        if(status){
+        if (status) {
             return ResponseDto.success();
-        }else{
+        } else {
             return ResponseDto.error(-1, "Category delete failed");
         }
     }
 
     @PostMapping("/del/{id}")
-    public ResponseDto<Boolean> delCategoryById(@PathVariable Integer id){
+    public ResponseDto<Boolean> delCategoryById(@PathVariable Integer id) {
         Boolean status = categoriesControllerService.delCategory(id);
-        if(status){
+        if (status) {
             return ResponseDto.success();
-        }else{
+        } else {
             return ResponseDto.error(-1, "Category delete failed");
         }
     }

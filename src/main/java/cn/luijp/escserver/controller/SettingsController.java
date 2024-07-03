@@ -2,7 +2,6 @@ package cn.luijp.escserver.controller;
 
 import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.service.SettingsControllerService;
-import cn.luijp.escserver.service.impl.SettingsControllerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +21,7 @@ public class SettingsController {
     @GetMapping("/")
     public ResponseDto<Map<String, Map<String, String>>> getSettings() {
         Map<String, Map<String, String>> allSettings = settingsControllerService.getAllSettings();
-        if(allSettings.isEmpty()){
+        if (allSettings.isEmpty()) {
             return ResponseDto.error(-1, "System Error");
         }
         return ResponseDto.successWithData(allSettings);

@@ -20,7 +20,7 @@ public class SettingsControllerServiceImpl implements SettingsControllerService 
 
     @Autowired
     public SettingsControllerServiceImpl(IGlobalSettingsService globalSettingsService,
-                                         ICustomSettingsService customSettingsService){
+                                         ICustomSettingsService customSettingsService) {
         this.globalSettingsService = globalSettingsService;
         this.customSettingsService = customSettingsService;
     }
@@ -75,9 +75,9 @@ public class SettingsControllerServiceImpl implements SettingsControllerService 
     }
 
     private Boolean deleteCustomSettings(List<String> customSettingsDelList) {
-        if(!customSettingsDelList.isEmpty()){
+        if (!customSettingsDelList.isEmpty()) {
             QueryWrapper<GlobalSettings> queryWrapper = new QueryWrapper<>();
-            queryWrapper.in("k",customSettingsDelList);
+            queryWrapper.in("k", customSettingsDelList);
             return globalSettingsService.remove(queryWrapper);
         }
         return true;

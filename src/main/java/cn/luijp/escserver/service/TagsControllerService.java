@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface TagsControllerService {
 
-    public List<Tags> getAllTags();
+    List<Tags> getAllTags();
 
-    public Boolean updateTag(Tags tag);
+    Boolean updateTag(Tags tag);
 
-    public Boolean delTag(Tags tag);
+    Boolean delTag(Tags tag);
 
-    public Boolean delTag(Integer tagId);
+    Boolean delTag(Integer tagId);
 
-    public List<Tags> getTagsByPostId(Integer postId);
+    List<Tags> getTagsByPostId(Integer postId);
 }

@@ -1,14 +1,9 @@
 package cn.luijp.escserver.cache;
 
-import cn.luijp.escserver.model.entity.Categories;
 import cn.luijp.escserver.service.CategoriesControllerService;
 import cn.luijp.escserver.service.TagsControllerService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class CacheManager {
@@ -18,7 +13,7 @@ public class CacheManager {
     private final TagsControllerService tagsControllerService;
 
     @Autowired
-    public CacheManager(CategoriesControllerService categoriesControllerService,TagsControllerService tagsControllerService) {
+    public CacheManager(CategoriesControllerService categoriesControllerService, TagsControllerService tagsControllerService) {
         this.categoriesControllerService = categoriesControllerService;
         this.tagsControllerService = tagsControllerService;
     }

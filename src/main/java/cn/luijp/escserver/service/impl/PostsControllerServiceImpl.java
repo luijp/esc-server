@@ -11,7 +11,6 @@ import cn.luijp.escserver.service.IPostCategoriesService;
 import cn.luijp.escserver.service.IPostTagsService;
 import cn.luijp.escserver.service.IPostsService;
 import cn.luijp.escserver.service.PostsControllerService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class PostsControllerServiceImpl implements PostsControllerService {
@@ -67,7 +65,7 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         cacheManager.init();
         IPage<Posts> postsPage = new Page<>(pageNum, pageSize);
         QueryWrapper<Posts> postsQueryWrapper = new QueryWrapper<>();
-        postsQueryWrapper.eq("type", type).eq("visible",true);
+        postsQueryWrapper.eq("type", type).eq("visible", true);
 
         //获得文章列表
         IPage<Posts> postPage = postsService.page(postsPage, postsQueryWrapper);
@@ -82,18 +80,18 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         //获得文章ID
         List<Integer> postIdsList = postsList.stream().map(Posts::getId).toList();
 
-        if(postIdsList.isEmpty()){
+        if (postIdsList.isEmpty()) {
             return postsListDto;
         }
         //获取文章TAG
         QueryWrapper<PostTags> postTagsQueryWrapper = new QueryWrapper<>();
         postTagsQueryWrapper.in("post_id", postIdsList);
         List<PostTags> postTagsList = postTagsService.list(postTagsQueryWrapper);
-        Map<Integer,List<Integer>> postTagsMap = new HashMap<>();
+        Map<Integer, List<Integer>> postTagsMap = new HashMap<>();
         postTagsList.forEach(item -> {
-            if(postTagsMap.containsKey(item.getPostId()) && !postTagsMap.get(item.getPostId()).isEmpty()){
+            if (postTagsMap.containsKey(item.getPostId()) && !postTagsMap.get(item.getPostId()).isEmpty()) {
                 postTagsMap.get(item.getPostId()).add(item.getTagId());
-            }else{
+            } else {
                 List<Integer> tagIds = new ArrayList<>();
                 tagIds.add(item.getTagId());
                 postTagsMap.put(item.getPostId(), tagIds);
@@ -105,11 +103,11 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         QueryWrapper<PostCategories> postCategoriesQueryWrapper = new QueryWrapper<>();
         postCategoriesQueryWrapper.in("post_id", postIdsList);
         List<PostCategories> postCategoriesList = postCategoriesService.list(postCategoriesQueryWrapper);
-        Map<Integer,List<Integer>> postCategoriesMap = new HashMap<>();
+        Map<Integer, List<Integer>> postCategoriesMap = new HashMap<>();
         postCategoriesList.forEach(item -> {
-            if(postCategoriesMap.containsKey(item.getPostId()) && !postCategoriesMap.get(item.getPostId()).isEmpty()){
+            if (postCategoriesMap.containsKey(item.getPostId()) && !postCategoriesMap.get(item.getPostId()).isEmpty()) {
                 postCategoriesMap.get(item.getPostId()).add(item.getCategoryId());
-            }else{
+            } else {
                 List<Integer> categoryId = new ArrayList<>();
                 categoryId.add(item.getCategoryId());
                 postCategoriesMap.put(item.getPostId(), categoryId);
@@ -118,7 +116,7 @@ public class PostsControllerServiceImpl implements PostsControllerService {
 
         //将分类信息和TAGS插入文章数据中
         List<PostsWithTC> postsWithTCList = new ArrayList<>();
-        postsList.forEach(item->{
+        postsList.forEach(item -> {
             PostsWithTC pwt = new PostsWithTC();
             pwt.setId(item.getId());
             pwt.setTitle(item.getTitle());
@@ -132,15 +130,15 @@ public class PostsControllerServiceImpl implements PostsControllerService {
 
 
             List<Tags> tagsList = new ArrayList<>();
-            if(postTagsMap.containsKey(item.getId())){
-                postTagsMap.get(item.getId()).forEach(tagsItem ->{
+            if (postTagsMap.containsKey(item.getId())) {
+                postTagsMap.get(item.getId()).forEach(tagsItem -> {
                     tagsList.add(TagsCache.tagsMap.get(tagsItem));
                 });
             }
             pwt.setTags(tagsList);
 
             List<Categories> categoriesList = new ArrayList<>();
-            if(postCategoriesMap.containsKey(item.getId())) {
+            if (postCategoriesMap.containsKey(item.getId())) {
                 postCategoriesMap.get(item.getId()).forEach(categoriesItem -> {
                     categoriesList.add(CategoriesCache.CategoriesMap.get(categoriesItem));
                 });
@@ -161,8 +159,8 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         postTagsService.remove(queryWrapper);
 
         List<PostTags> postTagsList = new ArrayList<>();
-        tagIds.forEach(item->{
-            if(TagsCache.tagsMap.containsKey(item)){
+        tagIds.forEach(item -> {
+            if (TagsCache.tagsMap.containsKey(item)) {
                 PostTags pt = new PostTags();
                 pt.setPostId(postId);
                 pt.setTagId(item);
@@ -178,8 +176,8 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         postCategoriesService.remove(queryWrapper);
 
         List<PostCategories> postCategories = new ArrayList<>();
-        categoryIds.forEach(item->{
-            if(CategoriesCache.CategoriesMap.containsKey(item)){
+        categoryIds.forEach(item -> {
+            if (CategoriesCache.CategoriesMap.containsKey(item)) {
                 PostCategories pc = new PostCategories();
                 pc.setPostId(postId);
                 pc.setCategoryId(item);

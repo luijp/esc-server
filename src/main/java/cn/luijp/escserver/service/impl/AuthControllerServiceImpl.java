@@ -9,7 +9,6 @@ import cn.luijp.escserver.service.ILoginService;
 import cn.luijp.escserver.util.JwtUtil;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,12 +40,12 @@ public class AuthControllerServiceImpl implements AuthControllerService {
         queryWrapper.eq("username", username);
         queryWrapper.eq("password", password);
         Auth auth = authService.getOne(queryWrapper);
-        if(auth == null) {
+        if (auth == null) {
             return null;
-        }else{
+        } else {
             String uuid = UUID.randomUUID().toString();
-            Map<String,String> map = new HashMap<>();
-            map.put("uuid",uuid);
+            Map<String, String> map = new HashMap<>();
+            map.put("uuid", uuid);
             String token = jwtUtil.generateToken(map);
             Login login = new Login();
             login.setUuid(uuid);
@@ -59,9 +58,9 @@ public class AuthControllerServiceImpl implements AuthControllerService {
 
     public void logout(String token) {
         Login login = auth(token);
-        if(login != null) {
+        if (login != null) {
             QueryWrapper<Login> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("uuid",login.getUuid());
+            queryWrapper.eq("uuid", login.getUuid());
             login.setToken("");
             JwtCache.jwtList.remove(login.getToken());
             loginService.update(queryWrapper);
@@ -70,20 +69,20 @@ public class AuthControllerServiceImpl implements AuthControllerService {
 
     public Login auth(String token) {
         DecodedJWT verify = jwtUtil.verify(token);
-        if(verify == null) {
+        if (verify == null) {
             return null;
         }
         Login login = new Login();
-        if(JwtCache.jwtList.contains(token)){
+        if (JwtCache.jwtList.contains(token)) {
             login.setUuid(verify.getClaim("uuid").asString());
             login.setLoginTime(LocalDateTime.now());
-        }else{
+        } else {
             QueryWrapper<Login> loginQueryWrapper = new QueryWrapper<>();
-            loginQueryWrapper.eq("token",token);
+            loginQueryWrapper.eq("token", token);
             login = loginService.getOne(loginQueryWrapper);
-            if(login == null) {
+            if (login == null) {
                 return null;
-            }else{
+            } else {
                 JwtCache.jwtList.add(token);
             }
         }
