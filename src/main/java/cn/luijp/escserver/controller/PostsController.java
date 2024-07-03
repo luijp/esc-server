@@ -70,4 +70,12 @@ public class PostsController {
             return ResponseDto.error(-1,"Post add categories failed");
         }
     }
+    /*
+     * todoList:
+     * del tags and category
+     * add limit when add tags and category
+     * get tags and category when get single post
+     * get page api
+     * refresh cache when add tags and categories
+     */
 }

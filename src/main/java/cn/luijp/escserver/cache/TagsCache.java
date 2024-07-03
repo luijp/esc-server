@@ -12,25 +12,6 @@ import java.util.Map;
 
 @Component
 public class TagsCache {
+    public static Map<Integer, Tags> tagsMap = new HashMap<>();
 
-    @Autowired
-    private TagsControllerService tagsControllerService;
-
-    private static final Map<Integer, Tags> tagsList = new HashMap<>();
-
-    public void fresh(){
-        tagsList.clear();
-        List<Tags> allTags = tagsControllerService.getAllTags();
-        allTags.forEach(item -> {
-            tagsList.put(item.getId(), item);
-        });
-    }
-
-    public static Tags get(Integer id){
-        if(tagsList.isEmpty()){
-            TagsCache tc = new TagsCache();
-            tc.fresh();
-        }
-        return tagsList.get(id);
-    }
 }

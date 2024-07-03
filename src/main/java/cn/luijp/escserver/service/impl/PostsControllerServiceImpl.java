@@ -1,6 +1,7 @@
 package cn.luijp.escserver.service.impl;
 
 import cn.luijp.escserver.Exception.PostNotFoundException;
+import cn.luijp.escserver.cache.CacheManager;
 import cn.luijp.escserver.cache.CategoriesCache;
 import cn.luijp.escserver.cache.TagsCache;
 import cn.luijp.escserver.model.dto.PostsListDto;
@@ -32,13 +33,17 @@ public class PostsControllerServiceImpl implements PostsControllerService {
 
     private final IPostCategoriesService postCategoriesService;
 
+    private final CacheManager cacheManager;
+
     @Autowired
     public PostsControllerServiceImpl(IPostsService postsService,
                                       IPostTagsService postTagsService,
-                                      IPostCategoriesService postCategoriesService) {
+                                      IPostCategoriesService postCategoriesService,
+                                      CacheManager cacheManager) {
         this.postsService = postsService;
         this.postTagsService = postTagsService;
         this.postCategoriesService = postCategoriesService;
+        this.cacheManager = cacheManager;
     }
 
     public Boolean updatePost(Posts posts) {
@@ -59,6 +64,7 @@ public class PostsControllerServiceImpl implements PostsControllerService {
 
     public PostsListDto getPostsList(Integer pageNum, Integer pageSize, Integer type) {
 
+        cacheManager.init();
         IPage<Posts> postsPage = new Page<>(pageNum, pageSize);
         QueryWrapper<Posts> postsQueryWrapper = new QueryWrapper<>();
         postsQueryWrapper.eq("type", type).eq("visible",true);
@@ -85,13 +91,14 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         List<PostTags> postTagsList = postTagsService.list(postTagsQueryWrapper);
         Map<Integer,List<Integer>> postTagsMap = new HashMap<>();
         postTagsList.forEach(item -> {
-            if(!postTagsMap.get(item.getPostId()).isEmpty()){
+            if(postTagsMap.containsKey(item.getPostId()) && !postTagsMap.get(item.getPostId()).isEmpty()){
                 postTagsMap.get(item.getPostId()).add(item.getTagId());
             }else{
                 List<Integer> tagIds = new ArrayList<>();
                 tagIds.add(item.getTagId());
                 postTagsMap.put(item.getPostId(), tagIds);
             }
+
         });
 
         //获取文章分类
@@ -100,7 +107,7 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         List<PostCategories> postCategoriesList = postCategoriesService.list(postCategoriesQueryWrapper);
         Map<Integer,List<Integer>> postCategoriesMap = new HashMap<>();
         postCategoriesList.forEach(item -> {
-            if(!postCategoriesMap.get(item.getPostId()).isEmpty()){
+            if(postCategoriesMap.containsKey(item.getPostId()) && !postCategoriesMap.get(item.getPostId()).isEmpty()){
                 postCategoriesMap.get(item.getPostId()).add(item.getCategoryId());
             }else{
                 List<Integer> categoryId = new ArrayList<>();
@@ -127,7 +134,7 @@ public class PostsControllerServiceImpl implements PostsControllerService {
             List<Tags> tagsList = new ArrayList<>();
             if(postTagsMap.containsKey(item.getId())){
                 postTagsMap.get(item.getId()).forEach(tagsItem ->{
-                    tagsList.add(TagsCache.get(tagsItem));
+                    tagsList.add(TagsCache.tagsMap.get(tagsItem));
                 });
             }
             pwt.setTags(tagsList);
@@ -135,7 +142,7 @@ public class PostsControllerServiceImpl implements PostsControllerService {
             List<Categories> categoriesList = new ArrayList<>();
             if(postCategoriesMap.containsKey(item.getId())) {
                 postCategoriesMap.get(item.getId()).forEach(categoriesItem -> {
-                    categoriesList.add(CategoriesCache.get(categoriesItem));
+                    categoriesList.add(CategoriesCache.CategoriesMap.get(categoriesItem));
                 });
             }
             pwt.setCategories(categoriesList);

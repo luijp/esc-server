@@ -9,27 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
 public class CategoriesCache {
 
-    @Autowired
-    private CategoriesControllerService categoriesControllerService;
+    public static Map<Integer, Categories> CategoriesMap = new HashMap<>();
 
-    private static final Map<Integer, Categories> CategoriesList = new HashMap<>();
-
-    public void fresh(){
-        CategoriesList.clear();
-        List<Categories> allCategories = categoriesControllerService.getAllCategories();
-        allCategories.forEach(item -> {
-            CategoriesList.put(item.getId(), item);
-        });
-    }
-
-    public static Categories get(Integer id){
-        if(CategoriesList.isEmpty()){
-            CategoriesCache cc = new CategoriesCache();
-            cc.fresh();
-        }
-        return CategoriesList.get(id);
-    }
 }
