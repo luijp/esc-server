@@ -72,8 +72,7 @@ public class PostsController {
     }
     /*
      * todoList:
-     * del tags and category
-     * add limit when add tags and category
+     * del tags and category  -- also need remove from posttags and postcategories
      * get tags and category when get single post
      * get page api
      * refresh cache when add tags and categories

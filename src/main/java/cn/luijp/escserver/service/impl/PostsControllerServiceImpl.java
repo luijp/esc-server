@@ -162,10 +162,12 @@ public class PostsControllerServiceImpl implements PostsControllerService {
 
         List<PostTags> postTagsList = new ArrayList<>();
         tagIds.forEach(item->{
-            PostTags pt = new PostTags();
-            pt.setPostId(postId);
-            pt.setTagId(item);
-            postTagsList.add(pt);
+            if(TagsCache.tagsMap.containsKey(item)){
+                PostTags pt = new PostTags();
+                pt.setPostId(postId);
+                pt.setTagId(item);
+                postTagsList.add(pt);
+            }
         });
         return postTagsService.saveBatch(postTagsList);
     }
@@ -177,10 +179,12 @@ public class PostsControllerServiceImpl implements PostsControllerService {
 
         List<PostCategories> postCategories = new ArrayList<>();
         categoryIds.forEach(item->{
-            PostCategories pc = new PostCategories();
-            pc.setPostId(postId);
-            pc.setCategoryId(item);
-            postCategories.add(pc);
+            if(CategoriesCache.CategoriesMap.containsKey(item)){
+                PostCategories pc = new PostCategories();
+                pc.setPostId(postId);
+                pc.setCategoryId(item);
+                postCategories.add(pc);
+            }
         });
         return postCategoriesService.saveBatch(postCategories);
     }
