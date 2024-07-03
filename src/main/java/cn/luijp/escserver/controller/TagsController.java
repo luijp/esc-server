@@ -25,32 +25,32 @@ public class TagsController {
     }
 
     @PostMapping("/update")
-    public ResponseDto<Boolean> updateTags(@RequestBody Tags tag){
+    public ResponseDto<Boolean> updateTag(@RequestBody Tags tag){
         Boolean status = tagsControllerService.updateTag(tag);
         if(status){
             return ResponseDto.success();
         }else{
-            return ResponseDto.error(-1, "Update failed");
+            return ResponseDto.error(-1, "Tag update failed");
         }
     }
 
     @PostMapping("/del")
-    public ResponseDto<Boolean> delTags(@RequestBody Tags tag){
-        Boolean status = tagsControllerService.delTags(tag);
+    public ResponseDto<Boolean> delTag(@RequestBody Tags tag){
+        Boolean status = tagsControllerService.delTag(tag);
         if(status){
             return ResponseDto.success();
         }else{
-            return ResponseDto.error(-1, "Delete failed");
+            return ResponseDto.error(-1, "Tag delete failed");
         }
     }
 
     @PostMapping("/del/{id}")
     public ResponseDto<Boolean> delTagById(@PathVariable Integer id){
-        Boolean status = tagsControllerService.delTags(id);
+        Boolean status = tagsControllerService.delTag(id);
         if(status){
             return ResponseDto.success();
         }else{
-            return ResponseDto.error(-1, "Delete failed");
+            return ResponseDto.error(-1, "Tag delete failed");
         }
     }
 }

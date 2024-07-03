@@ -27,7 +27,7 @@ public class TagsControllerServiceImpl implements TagsControllerService {
 
     public Boolean updateTag(Tags tag) {
         if(Objects.equals(tag.getName(), "")){
-            return delTags(tag);
+            return delTag(tag);
         }
         try{
             return tagsService.saveOrUpdate(tag);
@@ -37,11 +37,11 @@ public class TagsControllerServiceImpl implements TagsControllerService {
 
     }
 
-    public Boolean delTags(Tags tag){
+    public Boolean delTag(Tags tag){
         return tagsService.removeById(tag.getId());
     }
 
-    public Boolean delTags(Integer tagId){
+    public Boolean delTag(Integer tagId){
         return tagsService.removeById(tagId);
 
     }

@@ -10,7 +10,7 @@ public interface TagsControllerService {
 
     public Boolean updateTag(Tags tag);
 
-    public Boolean delTags(Tags tag);
+    public Boolean delTag(Tags tag);
 
-    public Boolean delTags(Integer tagId);
+    public Boolean delTag(Integer tagId);
 }
