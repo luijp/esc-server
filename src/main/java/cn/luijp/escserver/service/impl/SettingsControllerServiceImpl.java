@@ -2,6 +2,8 @@ package cn.luijp.escserver.service.impl;
 
 import cn.luijp.escserver.model.entity.CustomSettings;
 import cn.luijp.escserver.model.entity.GlobalSettings;
+import cn.luijp.escserver.service.ICustomSettingsService;
+import cn.luijp.escserver.service.IGlobalSettingsService;
 import cn.luijp.escserver.service.SettingsControllerService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,13 @@ import java.util.*;
 @Service
 public class SettingsControllerServiceImpl implements SettingsControllerService {
 
-    private final GlobalSettingsServiceImpl globalSettingsService;
+    private final IGlobalSettingsService globalSettingsService;
 
-    private final CustomSettingsServiceImpl customSettingsService;
+    private final ICustomSettingsService customSettingsService;
 
     @Autowired
-    public SettingsControllerServiceImpl(GlobalSettingsServiceImpl globalSettingsService,
-            CustomSettingsServiceImpl customSettingsService){
+    public SettingsControllerServiceImpl(IGlobalSettingsService globalSettingsService,
+                                         ICustomSettingsService customSettingsService){
         this.globalSettingsService = globalSettingsService;
         this.customSettingsService = customSettingsService;
     }

@@ -1,6 +1,7 @@
 package cn.luijp.escserver.controller;
 
 import cn.luijp.escserver.model.dto.ResponseDto;
+import cn.luijp.escserver.service.SettingsControllerService;
 import cn.luijp.escserver.service.impl.SettingsControllerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +12,10 @@ import java.util.Map;
 @RequestMapping("/api/settings")
 public class SettingsController {
 
-    private final SettingsControllerServiceImpl settingsControllerService;
+    private final SettingsControllerService settingsControllerService;
 
     @Autowired
-    public SettingsController(SettingsControllerServiceImpl settingsControllerService) {
+    public SettingsController(SettingsControllerService settingsControllerService) {
         this.settingsControllerService = settingsControllerService;
     }
 
