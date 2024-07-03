@@ -20,6 +20,8 @@ public class Posts {
 
     private String content;
 
+    private String summary;
+
     /**
      * 缩略图
      */
