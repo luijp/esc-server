@@ -39,18 +39,13 @@ public class SettingsControllerServiceImpl implements SettingsControllerService 
 
     public Boolean setGlobalSettings(Map<String, String> globalSettings) {
         List<GlobalSettings> globalSettingsUpdateList = new ArrayList<>();
-        List<String> globalSettingsDelList = new ArrayList<>();
         globalSettings.forEach((k, v) -> {
-            if (Objects.equals(v, "")) {
-                globalSettingsDelList.add(k);
-            } else {
-                GlobalSettings globalSettingsItem = new GlobalSettings();
-                globalSettingsItem.setK(k);
-                globalSettingsItem.setV(v);
-                globalSettingsUpdateList.add(globalSettingsItem);
-            }
+            GlobalSettings globalSettingsItem = new GlobalSettings();
+            globalSettingsItem.setK(k);
+            globalSettingsItem.setV(v);
+            globalSettingsUpdateList.add(globalSettingsItem);
         });
-        return deleteGlobalSettings(globalSettingsDelList) && globalSettingsService.saveOrUpdateBatch(globalSettingsUpdateList);
+        return globalSettingsService.saveOrUpdateBatch(globalSettingsUpdateList);
 
     }
 
@@ -75,15 +70,6 @@ public class SettingsControllerServiceImpl implements SettingsControllerService 
             }
         });
         return deleteCustomSettings(customSettingsDelList) && customSettingsService.saveOrUpdateBatch(customSettingsUpdateList);
-    }
-
-    private Boolean deleteGlobalSettings(List<String> globalSettingsDelList) {
-        if(!globalSettingsDelList.isEmpty()){
-            QueryWrapper<GlobalSettings> queryWrapper = new QueryWrapper<>();
-            queryWrapper.in("k",globalSettingsDelList);
-            return globalSettingsService.remove(queryWrapper);
-        }
-        return true;
     }
 
     private Boolean deleteCustomSettings(List<String> customSettingsDelList) {
