@@ -32,11 +32,6 @@ public class Posts {
     private LocalDateTime updateTime;
 
     /**
-     * 文章连接
-     */
-    private String slug;
-
-    /**
      * 是否隐藏
      */
     private Boolean visible;
