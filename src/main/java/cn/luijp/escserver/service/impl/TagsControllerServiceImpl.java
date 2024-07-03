@@ -1,11 +1,13 @@
 package cn.luijp.escserver.service.impl;
 
+import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.service.ITagsService;
 import cn.luijp.escserver.service.TagsControllerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,11 +25,16 @@ public class TagsControllerServiceImpl implements TagsControllerService {
         return tagsService.list();
     }
 
-    public Boolean updateTag(Tags tag){
+    public Boolean updateTag(Tags tag) {
         if(Objects.equals(tag.getName(), "")){
             return delTags(tag);
         }
-        return tagsService.saveOrUpdate(tag);
+        try{
+            return tagsService.saveOrUpdate(tag);
+        }catch (Exception ex){
+            return false;
+        }
+
     }
 
     public Boolean delTags(Tags tag){
