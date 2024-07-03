@@ -9,6 +9,7 @@ import cn.luijp.escserver.service.ILoginService;
 import cn.luijp.escserver.util.JwtUtil;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,8 +60,11 @@ public class AuthControllerServiceImpl implements AuthControllerService {
     public void logout(String token) {
         Login login = auth(token);
         if(login != null) {
+            QueryWrapper<Login> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("uuid",login.getUuid());
             login.setToken("");
-            loginService.updateById(login);
+            JwtCache.jwtList.remove(login.getToken());
+            loginService.update(queryWrapper);
         }
     }
 
