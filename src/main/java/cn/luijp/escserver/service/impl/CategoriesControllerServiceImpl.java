@@ -1,9 +1,13 @@
 package cn.luijp.escserver.service.impl;
 
 import cn.luijp.escserver.model.entity.Categories;
+import cn.luijp.escserver.model.entity.PostCategories;
 import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.service.CategoriesControllerService;
 import cn.luijp.escserver.service.ICategoriesService;
+import cn.luijp.escserver.service.IPostCategoriesService;
+import cn.luijp.escserver.service.IPostTagsService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +20,12 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
 
     private final ICategoriesService categoriesService;
 
+    private final IPostCategoriesService postCategoriesService;
+
     @Autowired
-    public CategoriesControllerServiceImpl(ICategoriesService categoriesService) {
+    public CategoriesControllerServiceImpl(ICategoriesService categoriesService,IPostCategoriesService postCategoriesService) {
         this.categoriesService = categoriesService;
+        this.postCategoriesService = postCategoriesService;
     }
 
     public List<Categories> getAllCategories() {
@@ -37,17 +44,18 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
     }
 
     public Boolean delCategory(Categories category) {
-        try{
-            return categoriesService.removeById(category.getId());
-        }catch (Exception ex){
-            return false;
-        }
+        return delCategory(category.getId());
 
     }
 
     public Boolean delCategory(Integer categoryId) {
         try{
-            return categoriesService.removeById(categoryId);
+            categoriesService.removeById(categoryId);
+            QueryWrapper<PostCategories> wrapper = new QueryWrapper<>();
+            wrapper.eq("category_id", categoryId);
+            postCategoriesService.remove(wrapper);
+            return true;
+
         }catch (Exception ex){
             return false;
         }
