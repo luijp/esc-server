@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: esc-server
+  datasource:
+    url: jdbc:mariadb://localhost:3306/esc
+    username: YOUR-DB-USERNAME
+    password: YOUR-DB-PASSWORD
+    driver-class-name: org.mariadb.jdbc.Driver
+esc:
+  jwt-secret: RANDOM-SECRET
