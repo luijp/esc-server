@@ -1,5 +1,6 @@
 package cn.luijp.escserver.service.impl;
 
+import cn.luijp.escserver.Exception.PostNotFoundException;
 import cn.luijp.escserver.cache.CategoriesCache;
 import cn.luijp.escserver.cache.TagsCache;
 import cn.luijp.escserver.model.dto.PostsListDto;
@@ -49,7 +50,11 @@ public class PostsControllerServiceImpl implements PostsControllerService {
     }
 
     public Posts getPost(Integer id) {
-        return postsService.getById(id);
+        Posts post = postsService.getById(id);
+        if (post == null) {
+            throw new PostNotFoundException();
+        }
+        return post;
     }
 
     public PostsListDto getPostsList(Integer pageNum, Integer pageSize, Integer type) {
@@ -71,6 +76,9 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         //获得文章ID
         List<Integer> postIdsList = postsList.stream().map(Posts::getId).toList();
 
+        if(postIdsList.isEmpty()){
+            return postsListDto;
+        }
         //获取文章TAG
         QueryWrapper<PostTags> postTagsQueryWrapper = new QueryWrapper<>();
         postTagsQueryWrapper.in("post_id", postIdsList);
@@ -117,15 +125,19 @@ public class PostsControllerServiceImpl implements PostsControllerService {
 
 
             List<Tags> tagsList = new ArrayList<>();
-            postTagsMap.get(item.getId()).forEach(tagsItem ->{
-                tagsList.add(TagsCache.get(tagsItem));
-            });
+            if(postTagsMap.containsKey(item.getId())){
+                postTagsMap.get(item.getId()).forEach(tagsItem ->{
+                    tagsList.add(TagsCache.get(tagsItem));
+                });
+            }
             pwt.setTags(tagsList);
 
             List<Categories> categoriesList = new ArrayList<>();
-            postCategoriesMap.get(item.getId()).forEach(categoriesItem ->{
-                categoriesList.add(CategoriesCache.get(categoriesItem));
-            });
+            if(postCategoriesMap.containsKey(item.getId())) {
+                postCategoriesMap.get(item.getId()).forEach(categoriesItem -> {
+                    categoriesList.add(CategoriesCache.get(categoriesItem));
+                });
+            }
             pwt.setCategories(categoriesList);
             postsWithTCList.add(pwt);
 

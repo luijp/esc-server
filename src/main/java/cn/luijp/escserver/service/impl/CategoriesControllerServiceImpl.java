@@ -37,10 +37,21 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
     }
 
     public Boolean delCategory(Categories category) {
-        return categoriesService.removeById(category.getId());
+        try{
+            return categoriesService.removeById(category.getId());
+        }catch (Exception ex){
+            return false;
+        }
+
     }
 
     public Boolean delCategory(Integer categoryId) {
-        return categoriesService.removeById(categoryId);
+        try{
+            return categoriesService.removeById(categoryId);
+        }catch (Exception ex){
+            return false;
+        }
+
+
     }
 }

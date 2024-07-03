@@ -38,11 +38,21 @@ public class TagsControllerServiceImpl implements TagsControllerService {
     }
 
     public Boolean delTag(Tags tag){
-        return tagsService.removeById(tag.getId());
+        try{
+            return tagsService.removeById(tag.getId());
+        }catch (Exception ex){
+            return false;
+        }
+
     }
 
     public Boolean delTag(Integer tagId){
-        return tagsService.removeById(tagId);
+        try{
+            return tagsService.removeById(tagId);
+        }catch (Exception ex){
+            return false;
+        }
+
 
     }
 }
