@@ -56,12 +56,12 @@ public class TagsControllerServiceImpl implements TagsControllerService {
 
     public Boolean delTag(Integer tagId) {
         try {
-            tagsService.removeById(tagId);
+            boolean status = tagsService.removeById(tagId);
             QueryWrapper<PostTags> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("tag_id", tagId);
             postTagsService.remove(queryWrapper);
             cacheManager.init();
-            return true;
+            return status;
         } catch (Exception ex) {
             return false;
         }

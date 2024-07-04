@@ -57,12 +57,12 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
 
     public Boolean delCategory(Integer categoryId) {
         try {
-            categoriesService.removeById(categoryId);
+            boolean status = categoriesService.removeById(categoryId);
             QueryWrapper<PostCategories> wrapper = new QueryWrapper<>();
             wrapper.eq("category_id", categoryId);
             postCategoriesService.remove(wrapper);
             cacheManager.init();
-            return true;
+            return status;
 
         } catch (Exception ex) {
             return false;
