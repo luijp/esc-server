@@ -71,14 +71,19 @@ public class SettingsControllerServiceImpl implements SettingsControllerService 
                 customSettingsUpdateList.add(customSettingsItem);
             }
         });
-        return deleteCustomSettings(customSettingsDelList) && customSettingsService.saveOrUpdateBatch(customSettingsUpdateList);
+        boolean statusUpdate = true;
+        if(!customSettingsUpdateList.isEmpty()){
+            statusUpdate = customSettingsService.saveOrUpdateBatch(customSettingsUpdateList);
+        }
+
+        return deleteCustomSettings(customSettingsDelList) && statusUpdate;
     }
 
     private Boolean deleteCustomSettings(List<String> customSettingsDelList) {
         if (!customSettingsDelList.isEmpty()) {
-            QueryWrapper<GlobalSettings> queryWrapper = new QueryWrapper<>();
+            QueryWrapper<CustomSettings> queryWrapper = new QueryWrapper<>();
             queryWrapper.in("k", customSettingsDelList);
-            return globalSettingsService.remove(queryWrapper);
+            return customSettingsService.remove(queryWrapper);
         }
         return true;
     }

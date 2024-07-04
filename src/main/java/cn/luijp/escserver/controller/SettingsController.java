@@ -38,7 +38,7 @@ public class SettingsController {
 
     @GetMapping("/custom")
     public ResponseDto<Map<String, String>> getCustomSettings() {
-        return ResponseDto.successWithData(settingsControllerService.getGlobalSettings());
+        return ResponseDto.successWithData(settingsControllerService.getCustomSettings());
     }
 
     @PostMapping("/global")
