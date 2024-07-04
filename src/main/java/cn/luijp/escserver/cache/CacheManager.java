@@ -1,6 +1,8 @@
 package cn.luijp.escserver.cache;
 
 import cn.luijp.escserver.service.CategoriesControllerService;
+import cn.luijp.escserver.service.ICategoriesService;
+import cn.luijp.escserver.service.ITagsService;
 import cn.luijp.escserver.service.TagsControllerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,26 +10,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class CacheManager {
 
-    private final CategoriesControllerService categoriesControllerService;
+    private final ICategoriesService categoriesService;
 
-    private final TagsControllerService tagsControllerService;
+    private final ITagsService tagsService;
 
     @Autowired
-    public CacheManager(CategoriesControllerService categoriesControllerService, TagsControllerService tagsControllerService) {
-        this.categoriesControllerService = categoriesControllerService;
-        this.tagsControllerService = tagsControllerService;
+    public CacheManager(ICategoriesService categoriesService,
+                        ITagsService tagsService) {
+        this.categoriesService = categoriesService;
+        this.tagsService = tagsService;
+
     }
 
     public void init() {
         //Category
         CategoriesCache.CategoriesMap.clear();
-        categoriesControllerService.getAllCategories().forEach(item -> {
+        categoriesService.list().forEach(item -> {
             CategoriesCache.CategoriesMap.put(item.getId(), item);
         });
 
         //Tags
         TagsCache.tagsMap.clear();
-        tagsControllerService.getAllTags().forEach(item -> {
+        tagsService.list().forEach(item -> {
             TagsCache.tagsMap.put(item.getId(), item);
         });
     }
