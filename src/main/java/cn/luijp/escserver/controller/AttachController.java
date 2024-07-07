@@ -1,11 +1,16 @@
 package cn.luijp.escserver.controller;
 
 import cn.luijp.escserver.model.dto.ResponseDto;
+import cn.luijp.escserver.model.vo.FileUploadResultVo;
 import cn.luijp.escserver.service.controller.AttachControllerService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/attach")
@@ -19,13 +24,22 @@ public class AttachController {
     }
 
     @PostMapping("/upload")
-    public ResponseDto<Object> upload(@RequestParam("file") MultipartFile file) {
-        String upload = attachControllerService.upload(file);
-        if (upload == null) {
-            return ResponseDto.error(-1,"Upload failed");
-        }else{
-            return ResponseDto.success();
+    public ResponseDto<Object> upload(@RequestParam("files") MultipartFile[] files) {
+        List<FileUploadResultVo> fileUploadResultList = new ArrayList<>();
+        for(MultipartFile file : files) {
+            FileUploadResultVo fileUploadResultVo = new FileUploadResultVo();
+            fileUploadResultVo.setFileName(file.getOriginalFilename());
+            fileUploadResultVo.setSuccess(true);
+            String uuid = attachControllerService.upload(file);
+            if (uuid == null) {
+                fileUploadResultVo.setSuccess(false);
+            }else{
+                fileUploadResultVo.setUuid(uuid);
+            }
+            fileUploadResultList.add(fileUploadResultVo);
         }
+        return ResponseDto.successWithData(fileUploadResultList);
+
     }
 
     @GetMapping("/image/{uuid}")
