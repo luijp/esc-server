@@ -27,17 +27,9 @@ public class AuthController {
     @PostMapping("/")
     public ResponseDto<Object> index(HttpServletResponse response,
                                      HttpServletRequest request) {
-        Cookie[] browserCookies = request.getCookies();
-        if (browserCookies != null) {
-            for (Cookie cookie : browserCookies) {
-                if (cookie.getName().equals("jwt")) {
-                    String token = cookie.getValue();
-                    Login auth = authControllerService.auth(token);
-                    if (auth != null) {
-                        return ResponseDto.success();
-                    }
-                }
-            }
+        Login auth = authControllerService.auth(request);
+        if (auth != null) {
+            return ResponseDto.success();
         }
         return ResponseDto.error(-1, "Jwt verify failed");
     }
@@ -70,7 +62,7 @@ public class AuthController {
             }
         }
         if (token != null) {
-            authControllerService.logout(token);
+            authControllerService.logout(request);
         }
         return ResponseDto.success();
     }

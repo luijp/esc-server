@@ -1,5 +1,6 @@
 package cn.luijp.escserver.service.controller.impl;
 
+import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.Auth;
 import cn.luijp.escserver.model.entity.Login;
 import cn.luijp.escserver.service.controller.AuthControllerService;
@@ -10,6 +11,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,8 +54,8 @@ public class AuthControllerServiceImpl implements AuthControllerService {
         }
     }
 
-    public void logout(String token) {
-        Login login = auth(token);
+    public void logout(HttpServletRequest request) {
+        Login login = auth(request);
         if (login != null) {
             UpdateWrapper<Login> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq("uuid", login.getUuid()).set("token", "");
@@ -60,14 +63,22 @@ public class AuthControllerServiceImpl implements AuthControllerService {
         }
     }
 
-    public Login auth(String token) {
-        DecodedJWT verify = jwtUtil.verify(token);
-        if (verify == null) {
-            return null;
+    public Login auth(HttpServletRequest request) {
+        Cookie[] browserCookies = request.getCookies();
+        if (browserCookies != null) {
+            for (Cookie cookie : browserCookies) {
+                if (cookie.getName().equals("jwt")) {
+                    String token = cookie.getValue();
+                    DecodedJWT verify = jwtUtil.verify(token);
+                    if (verify == null) {
+                        return null;
+                    }
+                    LambdaQueryWrapper<Login> loginQueryWrapper = new LambdaQueryWrapper<>();
+                    loginQueryWrapper.eq(Login::getToken, token);
+                    return loginService.getOne(loginQueryWrapper);
+                }
+            }
         }
-        LambdaQueryWrapper<Login> loginQueryWrapper = new LambdaQueryWrapper<>();
-        loginQueryWrapper.eq(Login::getToken, token);
-        return loginService.getOne(loginQueryWrapper);
-
+        return null;
     }
 }

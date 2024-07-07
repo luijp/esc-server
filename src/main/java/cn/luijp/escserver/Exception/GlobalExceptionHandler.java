@@ -13,6 +13,11 @@ public class GlobalExceptionHandler {
         return ResponseDto.error(-404, "post not found");
     }
 
+    @ExceptionHandler(AuthForbiddenException.class)
+    public ResponseDto<Object> AuthForbiddenException(Exception ex){
+        return ResponseDto.error(-403, "auth forbidden");
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseDto<Object> globalException(Exception ex) {
         log.error(ex.getMessage());
