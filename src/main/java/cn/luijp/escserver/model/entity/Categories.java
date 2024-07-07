@@ -12,12 +12,12 @@ public class Categories {
 
     @Setter(lombok.AccessLevel.NONE)
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     private String name;
 
     private String alias;
 
-    private Integer parentId;
+    private Long parentId;
 
 }

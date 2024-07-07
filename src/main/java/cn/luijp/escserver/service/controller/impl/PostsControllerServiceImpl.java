@@ -57,11 +57,11 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         return postsService.saveOrUpdate(posts);
     }
 
-    public Boolean delPost(Integer id) {
+    public Boolean delPost(Long id) {
         return postsService.removeById(id);
     }
 
-    public Posts getPost(Integer id) {
+    public Posts getPost(Long id) {
         Posts post = postsService.getById(id);
         if (post == null) {
             throw new PostNotFoundException();
@@ -86,7 +86,7 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         postsListDto.setPostsList(new ArrayList<>());
 
         //获得文章ID
-        List<Integer> postIdsList = postsList.stream().map(Posts::getId).toList();
+        List<Long> postIdsList = postsList.stream().map(Posts::getId).toList();
 
         if (postIdsList.isEmpty()) {
             return postsListDto;
@@ -126,13 +126,13 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         return postsListDto;
     }
 
-    public Boolean addTags(Integer postId, List<Integer> tagIds) {
+    public Boolean addTags(Long postId, List<Long> tagIds) {
         LambdaQueryWrapper<PostTags> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PostTags::getPostId, postId);
         postTagsService.remove(queryWrapper);
 
         List<PostTags> postTagsList = new ArrayList<>();
-        List<Integer> tagsList = tagsService.list().stream().map(Tags::getId).toList();
+        List<Long> tagsList = tagsService.list().stream().map(Tags::getId).toList();
         tagIds.forEach(item -> {
             if (tagsList.contains(item)) {
                 PostTags pt = new PostTags();
@@ -144,13 +144,13 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         return postTagsService.saveBatch(postTagsList);
     }
 
-    public Boolean addCategories(Integer postId, List<Integer> categoryIds) {
+    public Boolean addCategories(Long postId, List<Long> categoryIds) {
         LambdaQueryWrapper<PostCategories> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PostCategories::getPostId, postId);
         postCategoriesService.remove(queryWrapper);
 
         List<PostCategories> postCategoriesList = new ArrayList<>();
-        List<Integer> categoriesList = categoriesService.list().stream().map(Categories::getId).toList();
+        List<Long> categoriesList = categoriesService.list().stream().map(Categories::getId).toList();
         categoryIds.forEach(item -> {
             if (categoriesList.contains(item)) {
                 PostCategories pc = new PostCategories();

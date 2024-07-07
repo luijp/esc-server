@@ -9,13 +9,13 @@ public interface PostsControllerService {
 
     Boolean updatePost(Posts posts);
 
-    Boolean delPost(Integer id);
+    Boolean delPost(Long id);
 
-    Posts getPost(Integer id);
+    Posts getPost(Long id);
 
     PostsListDto getPostsList(Integer pageNum, Integer pageSize, Integer type);
 
-    Boolean addTags(Integer postId, List<Integer> tagIds);
+    Boolean addTags(Long postId, List<Long> tagIds);
 
-    Boolean addCategories(Integer postId, List<Integer> categoryIds);
+    Boolean addCategories(Long postId, List<Long> categoryIds);
 }

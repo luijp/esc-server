@@ -53,7 +53,7 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
 
     }
 
-    public Boolean delCategory(Integer categoryId) {
+    public Boolean delCategory(Long categoryId) {
         try {
             boolean status = categoriesService.removeById(categoryId);
             LambdaQueryWrapper<PostCategories> wrapper = new LambdaQueryWrapper<>();
@@ -66,7 +66,7 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
         }
     }
 
-    public List<PostCategoriesWithCategoriesVo> getCategoriesByPostId(Integer postId) {
+    public List<PostCategoriesWithCategoriesVo> getCategoriesByPostId(Long postId) {
         LambdaQueryWrapper<PostCategories> postCategoriesQueryWrapper = new LambdaQueryWrapper<>();
         postCategoriesQueryWrapper.eq(PostCategories::getPostId, postId);
         return postCategoriesMapper.getPostCategoriesWithCategories(postCategoriesQueryWrapper);

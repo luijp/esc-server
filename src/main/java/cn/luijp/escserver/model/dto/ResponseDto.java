@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ResponseDto<T> {
-    private int code;
+    private Integer code;
     private String msg;
     private T data;
 
@@ -22,7 +22,7 @@ public class ResponseDto<T> {
         return new ResponseDto<>(0, "", data);
     }
 
-    public static <T> ResponseDto<T> error(int code, String msg) {
+    public static <T> ResponseDto<T> error(Integer code, String msg) {
         return new ResponseDto<>(code, msg, null);
     }
 }

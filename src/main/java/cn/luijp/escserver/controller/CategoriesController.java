@@ -36,7 +36,7 @@ public class CategoriesController {
     }
 
     @GetMapping("/get/{post_id}")
-    public ResponseDto<List<PostCategoriesWithCategoriesVo>> getCategoriesByPostId(@PathVariable int post_id) {
+    public ResponseDto<List<PostCategoriesWithCategoriesVo>> getCategoriesByPostId(@PathVariable Long post_id) {
         return ResponseDto.successWithData(categoriesControllerService.getCategoriesByPostId(post_id));
     }
 
@@ -51,7 +51,7 @@ public class CategoriesController {
     }
 
     @PostMapping("/del/{id}")
-    public ResponseDto<Boolean> delCategoryById(@PathVariable Integer id) {
+    public ResponseDto<Boolean> delCategoryById(@PathVariable Long id) {
         Boolean status = categoriesControllerService.delCategory(id);
         if (status) {
             return ResponseDto.success();

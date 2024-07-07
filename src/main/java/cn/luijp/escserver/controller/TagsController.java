@@ -26,7 +26,7 @@ public class TagsController {
     }
 
     @GetMapping("/get/{post_id}")
-    public ResponseDto<List<PostTagsWithTagsVo>> getTagsByPostId(@PathVariable int post_id) {
+    public ResponseDto<List<PostTagsWithTagsVo>> getTagsByPostId(@PathVariable Long post_id) {
         return ResponseDto.successWithData(tagsControllerService.getTagsByPostId(post_id));
     }
 
@@ -51,7 +51,7 @@ public class TagsController {
     }
 
     @PostMapping("/del/{id}")
-    public ResponseDto<Boolean> delTagById(@PathVariable Integer id) {
+    public ResponseDto<Boolean> delTagById(@PathVariable Long id) {
         Boolean status = tagsControllerService.delTag(id);
         if (status) {
             return ResponseDto.success();

@@ -36,7 +36,7 @@ public class PostsController {
     }
 
     @PostMapping("/del/{id}")
-    public ResponseDto<Posts> del(@PathVariable int id) {
+    public ResponseDto<Posts> del(@PathVariable Long id) {
         Boolean status = postsControllerService.delPost(id);
         if (status) {
             return ResponseDto.success();
@@ -46,13 +46,13 @@ public class PostsController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseDto<Posts> get(@PathVariable int id) {
+    public ResponseDto<Posts> get(@PathVariable Long id) {
         Posts post = postsControllerService.getPost(id);
         return ResponseDto.successWithData(post);
     }
 
     @PostMapping("/add/tags/{post_id}")
-    public ResponseDto<Posts> addTags(@RequestBody List<Integer> tags, @PathVariable int post_id) {
+    public ResponseDto<Posts> addTags(@RequestBody List<Long> tags, @PathVariable Long post_id) {
         Boolean status = postsControllerService.addTags(post_id, tags);
         if (status) {
             return ResponseDto.success();
@@ -62,7 +62,7 @@ public class PostsController {
     }
 
     @PostMapping("/add/categories/{post_id}")
-    public ResponseDto<Posts> addCategories(@RequestBody List<Integer> categories, @PathVariable int post_id) {
+    public ResponseDto<Posts> addCategories(@RequestBody List<Long> categories, @PathVariable Long post_id) {
         Boolean status = postsControllerService.addCategories(post_id, categories);
         if (status) {
             return ResponseDto.success();

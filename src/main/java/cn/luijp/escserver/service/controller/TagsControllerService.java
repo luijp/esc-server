@@ -13,7 +13,7 @@ public interface TagsControllerService {
 
     Boolean delTag(Tags tag);
 
-    Boolean delTag(Integer tagId);
+    Boolean delTag(Long tagId);
 
-    List<PostTagsWithTagsVo> getTagsByPostId(Integer postId);
+    List<PostTagsWithTagsVo> getTagsByPostId(Long postId);
 }

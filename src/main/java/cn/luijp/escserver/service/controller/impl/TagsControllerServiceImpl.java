@@ -52,7 +52,7 @@ public class TagsControllerServiceImpl implements TagsControllerService {
 
     }
 
-    public Boolean delTag(Integer tagId) {
+    public Boolean delTag(Long tagId) {
         try {
             boolean status = tagsService.removeById(tagId);
             LambdaQueryWrapper<PostTags> queryWrapper = new LambdaQueryWrapper<>();
@@ -64,7 +64,7 @@ public class TagsControllerServiceImpl implements TagsControllerService {
         }
     }
 
-    public List<PostTagsWithTagsVo> getTagsByPostId(Integer postId) {
+    public List<PostTagsWithTagsVo> getTagsByPostId(Long postId) {
         LambdaQueryWrapper<PostTags> postTagsLambdaQueryWrapper = new LambdaQueryWrapper<>();
         postTagsLambdaQueryWrapper.eq(PostTags::getPostId, postId);
         return postTagsMapper.getPostTagsWithTags(postTagsLambdaQueryWrapper);

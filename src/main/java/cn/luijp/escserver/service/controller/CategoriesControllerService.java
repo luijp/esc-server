@@ -13,7 +13,7 @@ public interface CategoriesControllerService {
 
     Boolean delCategory(Categories category);
 
-    Boolean delCategory(Integer categoryId);
+    Boolean delCategory(Long categoryId);
 
-    List<PostCategoriesWithCategoriesVo> getCategoriesByPostId(Integer postId);
+    List<PostCategoriesWithCategoriesVo> getCategoriesByPostId(Long postId);
 }

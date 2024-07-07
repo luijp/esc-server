@@ -12,10 +12,10 @@ public class PostTags {
 
     @Setter(lombok.AccessLevel.NONE)
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
-    private Integer tagId;
+    private Long tagId;
 
-    private Integer postId;
+    private Long postId;
 
 }

@@ -12,10 +12,10 @@ public class PostCategories {
 
     @Setter(lombok.AccessLevel.NONE)
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
-    private Integer postId;
+    private Long postId;
 
-    private Integer categoryId;
+    private Long categoryId;
 
 }
