@@ -5,24 +5,15 @@ import cn.luijp.escserver.model.dto.AttachListDto;
 import cn.luijp.escserver.model.entity.Attach;
 import cn.luijp.escserver.service.controller.AttachControllerService;
 import cn.luijp.escserver.service.db.IAttachService;
-import cn.luijp.escserver.util.JwtUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -31,25 +22,24 @@ import java.util.UUID;
 public class AttachControllerServiceImpl implements AttachControllerService {
 
     private final IAttachService attachService;
+    @Value("${esc.upload-path}")
+    private String filePath;
 
     @Autowired
     public AttachControllerServiceImpl(IAttachService attachService) {
         this.attachService = attachService;
     }
 
-    @Value("${esc.upload-path}")
-    private String filePath;
-
     public byte[] get(String uuid) {
-        if(uuid == null || uuid.isEmpty()){
+        if (uuid == null || uuid.isEmpty()) {
             throw new AttachFileNotFoundException();
         }
         Attach attach = attachService.getById(uuid);
-        if(attach == null){
+        if (attach == null) {
             throw new AttachFileNotFoundException();
         }
 
-        try{
+        try {
 
             File file = new File(filePath + "/" + attach.getPath() + "/" + attach.getUuid());
             FileInputStream inputStream = new FileInputStream(file);
@@ -57,18 +47,18 @@ public class AttachControllerServiceImpl implements AttachControllerService {
             inputStream.read(bytes, 0, inputStream.available());
             inputStream.close();
             return bytes;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new AttachFileNotFoundException();
         }
 
     }
 
     public String getOriginName(String uuid) {
-        if(uuid == null || uuid.isEmpty()){
+        if (uuid == null || uuid.isEmpty()) {
             throw new AttachFileNotFoundException();
         }
         Attach attach = attachService.getById(uuid);
-        if(attach == null){
+        if (attach == null) {
             throw new AttachFileNotFoundException();
         }
         return attach.getName();
@@ -87,10 +77,10 @@ public class AttachControllerServiceImpl implements AttachControllerService {
     }
 
     public String upload(MultipartFile file) {
-        if(file.isEmpty()) {
+        if (file.isEmpty()) {
             return null;
         }
-        try{
+        try {
             String uuid = UUID.randomUUID().toString();
             Attach attach = new Attach();
             attach.setUuid(uuid);
@@ -98,8 +88,8 @@ public class AttachControllerServiceImpl implements AttachControllerService {
             attach.setCreateTime(LocalDateTime.now());
             attach.setPath(Integer.toString(LocalDateTime.now().getYear()));
 
-            File dest = new File(filePath+ "/" + attach.getPath() + "/" + uuid);
-            if(!dest.getParentFile().exists()){
+            File dest = new File(filePath + "/" + attach.getPath() + "/" + uuid);
+            if (!dest.getParentFile().exists()) {
                 dest.getParentFile().mkdirs();
             }
             file.transferTo(dest);
@@ -107,21 +97,21 @@ public class AttachControllerServiceImpl implements AttachControllerService {
             attachService.save(attach);
             return uuid;
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return null;
         }
     }
 
     public Boolean del(String uuid) {
-        if(uuid == null || uuid.isEmpty()){
+        if (uuid == null || uuid.isEmpty()) {
             return false;
         }
-        try{
+        try {
             Attach attach = attachService.getById(uuid);
             File file = new File(filePath + "/" + attach.getPath() + "/" + uuid);
             file.delete();
             return attachService.removeById(uuid);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return false;
         }
 

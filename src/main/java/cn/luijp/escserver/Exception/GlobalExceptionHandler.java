@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AuthForbiddenException.class)
-    public ResponseDto<Object> AuthForbiddenException(Exception ex){
+    public ResponseDto<Object> AuthForbiddenException(Exception ex) {
         return ResponseDto.error(-403, "auth forbidden");
     }
 

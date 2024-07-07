@@ -10,8 +10,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class CommentControllerServiceImpl implements CommentControllerService {
 
@@ -34,7 +32,7 @@ public class CommentControllerServiceImpl implements CommentControllerService {
     public CommentListDto getComment(Long postId, Integer pageNum, Integer pageSize) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Comment::getPostId, postId);
-        Page<Comment> commentPage= commentService.page(new Page<>(pageNum, pageSize), queryWrapper);
+        Page<Comment> commentPage = commentService.page(new Page<>(pageNum, pageSize), queryWrapper);
         CommentListDto commentListDto = new CommentListDto();
         commentListDto.setCommentList(commentPage.getRecords());
         commentListDto.setTotal(commentPage.getTotal());

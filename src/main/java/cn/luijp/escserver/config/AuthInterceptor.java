@@ -6,7 +6,6 @@ import cn.luijp.escserver.service.controller.AuthControllerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -21,11 +20,11 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(request.getMethod().equals("GET")){
+        if (request.getMethod().equals("GET")) {
             return true;
         }
         Login auth = authControllerService.auth(request);
-        if(auth == null) {
+        if (auth == null) {
             throw new AuthForbiddenException();
         }
         return true;

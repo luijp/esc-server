@@ -1,6 +1,5 @@
 package cn.luijp.escserver.service.controller.impl;
 
-import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.Auth;
 import cn.luijp.escserver.model.entity.Login;
 import cn.luijp.escserver.service.controller.AuthControllerService;
