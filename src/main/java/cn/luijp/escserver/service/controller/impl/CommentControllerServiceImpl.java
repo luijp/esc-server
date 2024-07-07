@@ -5,6 +5,7 @@ import cn.luijp.escserver.model.entity.Comment;
 import cn.luijp.escserver.service.controller.CommentControllerService;
 import cn.luijp.escserver.service.db.ICommentService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class CommentControllerServiceImpl implements CommentControllerService {
     }
 
     public Boolean addComment(Comment comment) {
+        comment.setVisible(false);
         return commentService.save(comment);
     }
 
@@ -39,5 +41,11 @@ public class CommentControllerServiceImpl implements CommentControllerService {
         commentListDto.setPageNum(pageNum);
         commentListDto.setPageSize(pageSize);
         return commentListDto;
+    }
+
+    public Boolean passComment(Long id) {
+        LambdaUpdateWrapper<Comment> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Comment::getId, id).set(Comment::getVisible, true);
+        return commentService.update(updateWrapper);
     }
 }

@@ -12,4 +12,6 @@ public interface CommentControllerService {
     public Boolean delComment(Long id);
 
     public CommentListDto getComment(Long postId, Integer pageNum, Integer pageSize);
+
+    public Boolean passComment(Long id);
 }

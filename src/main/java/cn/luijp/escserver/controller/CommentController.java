@@ -46,4 +46,14 @@ public class CommentController {
             return ResponseDto.error(-1,"Comment delete failed");
         }
     }
+
+    @PostMapping("/pass/{id}")
+    public ResponseDto<Object> pass(@PathVariable Long id) {
+        Boolean status = commentControllerService.passComment(id);
+        if(status){
+            return ResponseDto.success();
+        }else {
+            return ResponseDto.error(-1,"Comment pass failed");
+        }
+    }
 }

@@ -14,4 +14,6 @@ public class Comment {
     private String email;
 
     private String content;
+
+    private Boolean visible;
 }
