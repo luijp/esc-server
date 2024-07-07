@@ -41,6 +41,7 @@ public class AuthController {
             return ResponseDto.error(-1, "Login failed");
         }
         Cookie cookie = new Cookie("jwt", login.getToken());
+        cookie.setPath("/");
         cookie.setMaxAge(3600 * 24 * 365);
         response.addCookie(cookie);
         return ResponseDto.success();
