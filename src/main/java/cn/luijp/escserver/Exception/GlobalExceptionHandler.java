@@ -18,6 +18,11 @@ public class GlobalExceptionHandler {
         return ResponseDto.error(-403, "auth forbidden");
     }
 
+    @ExceptionHandler(AttachFileNotFoundException.class)
+    public ResponseDto<Object> AttachFileNotFoundException(Exception ex) {
+        return ResponseDto.error(-405, "attach file not found");
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseDto<Object> globalException(Exception ex) {
         log.error(ex.getMessage());
