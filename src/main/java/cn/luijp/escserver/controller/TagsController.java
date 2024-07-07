@@ -2,7 +2,8 @@ package cn.luijp.escserver.controller;
 
 import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.Tags;
-import cn.luijp.escserver.service.TagsControllerService;
+import cn.luijp.escserver.model.vo.PostTagsWithTagsVo;
+import cn.luijp.escserver.service.controller.TagsControllerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class TagsController {
     }
 
     @GetMapping("/get/{post_id}")
-    public ResponseDto<List<Tags>> getTagsByPostId(@PathVariable int post_id) {
+    public ResponseDto<List<PostTagsWithTagsVo>> getTagsByPostId(@PathVariable int post_id) {
         return ResponseDto.successWithData(tagsControllerService.getTagsByPostId(post_id));
     }
 

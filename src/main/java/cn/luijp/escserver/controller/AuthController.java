@@ -3,7 +3,7 @@ package cn.luijp.escserver.controller;
 import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.Auth;
 import cn.luijp.escserver.model.entity.Login;
-import cn.luijp.escserver.service.AuthControllerService;
+import cn.luijp.escserver.service.controller.AuthControllerService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

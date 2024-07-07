@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +11,6 @@ import java.time.LocalDateTime;
 @Data
 public class Posts {
 
-    @Setter(lombok.AccessLevel.NONE)
     @TableId(type = IdType.AUTO)
     private Integer id;
 

@@ -1,7 +1,7 @@
 package cn.luijp.escserver.controller;
 
 import cn.luijp.escserver.model.dto.ResponseDto;
-import cn.luijp.escserver.service.SettingsControllerService;
+import cn.luijp.escserver.service.controller.SettingsControllerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
