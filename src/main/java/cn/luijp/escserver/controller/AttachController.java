@@ -1,8 +1,12 @@
 package cn.luijp.escserver.controller;
 
+import cn.luijp.escserver.model.dto.AttachListDto;
 import cn.luijp.escserver.model.dto.ResponseDto;
+import cn.luijp.escserver.model.entity.Attach;
 import cn.luijp.escserver.model.vo.FileUploadResultVo;
 import cn.luijp.escserver.service.controller.AttachControllerService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +43,12 @@ public class AttachController {
             fileUploadResultList.add(fileUploadResultVo);
         }
         return ResponseDto.successWithData(fileUploadResultList);
+    }
 
+    @PostMapping("/list/{pageNum}/{pageSize}")
+    public ResponseDto<AttachListDto> list(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+        AttachListDto attachListDto = attachControllerService.list(pageNum, pageSize);
+        return ResponseDto.successWithData(attachListDto);
     }
 
     @GetMapping("/image/{uuid}")

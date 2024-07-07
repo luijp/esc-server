@@ -1,10 +1,13 @@
 package cn.luijp.escserver.service.controller.impl;
 
 import cn.luijp.escserver.Exception.AttachFileNotFoundException;
+import cn.luijp.escserver.model.dto.AttachListDto;
 import cn.luijp.escserver.model.entity.Attach;
 import cn.luijp.escserver.service.controller.AttachControllerService;
 import cn.luijp.escserver.service.db.IAttachService;
 import cn.luijp.escserver.util.JwtUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +24,7 @@ import java.io.FileInputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -68,6 +72,18 @@ public class AttachControllerServiceImpl implements AttachControllerService {
             throw new AttachFileNotFoundException();
         }
         return attach.getName();
+    }
+
+    @Override
+    public AttachListDto list(Integer pageNum, Integer pageSize) {
+        IPage<Attach> attachPage = attachService.page(new Page<>(pageNum, pageSize));
+        List<Attach> attachList = attachPage.getRecords();
+        AttachListDto attachListDto = new AttachListDto();
+        attachListDto.setTotal(attachPage.getTotal());
+        attachListDto.setSize(pageSize);
+        attachListDto.setPage(pageNum);
+        attachListDto.setAttachList(attachList);
+        return attachListDto;
     }
 
     public String upload(MultipartFile file) {
