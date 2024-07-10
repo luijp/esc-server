@@ -2,6 +2,8 @@ package cn.luijp.escserver.Exception;
 
 import cn.luijp.escserver.model.dto.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -26,6 +28,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TooManyRequestException.class)
     public ResponseDto<Object> TooManyRequestException(Exception ex) {
         return ResponseDto.error(-429, "too many request");
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseDto<Object> MethodArgumentNotValidException(Exception ex) {
+        return ResponseDto.error(-1, "method not allowed");
     }
 
     @ExceptionHandler(Exception.class)
