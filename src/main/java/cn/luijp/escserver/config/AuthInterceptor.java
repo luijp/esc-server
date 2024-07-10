@@ -22,11 +22,15 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (request.getMethod().equals("GET")) {
             return true;
+        }else if (request.getMethod().equals("POST")) {
+            Login auth = authControllerService.auth(request);
+            if (auth == null) {
+                throw new AuthForbiddenException();
+            }
+            return true;
+        }else{
+            return false;
         }
-        Login auth = authControllerService.auth(request);
-        if (auth == null) {
-            throw new AuthForbiddenException();
-        }
-        return true;
+
     }
 }
