@@ -1,5 +1,6 @@
 package cn.luijp.escserver.controller;
 
+import cn.luijp.escserver.model.dto.CategoriesAllDto;
 import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.Categories;
 import cn.luijp.escserver.model.vo.PostCategoriesWithCategoriesVo;
@@ -21,8 +22,13 @@ public class CategoriesController {
     }
 
     @GetMapping("/")
-    public ResponseDto<List<Categories>> getCategories() {
+    public ResponseDto<List<CategoriesAllDto>> getAllCategories() {
         return ResponseDto.successWithData(categoriesControllerService.getAllCategories());
+    }
+
+    @GetMapping("/list")
+    public ResponseDto<List<Categories>> getCategoriesList() {
+        return ResponseDto.successWithData(categoriesControllerService.getCategoriesList());
     }
 
     @PostMapping("/update")

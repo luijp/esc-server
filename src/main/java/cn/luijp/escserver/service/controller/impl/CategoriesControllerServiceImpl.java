@@ -1,6 +1,7 @@
 package cn.luijp.escserver.service.controller.impl;
 
 import cn.luijp.escserver.mapper.PostCategoriesMapper;
+import cn.luijp.escserver.model.dto.CategoriesAllDto;
 import cn.luijp.escserver.model.entity.Categories;
 import cn.luijp.escserver.model.entity.PostCategories;
 import cn.luijp.escserver.model.vo.PostCategoriesWithCategoriesVo;
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,8 +35,34 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
         this.postCategoriesMapper = postCategoriesMapper;
     }
 
-    public List<Categories> getAllCategories() {
+    public List<CategoriesAllDto> getAllCategories() {
+        List<Categories> list = categoriesService.list();
+        return getCategories(list,0L);
+    }
+
+    public List<Categories> getCategoriesList() {
         return categoriesService.list();
+    }
+
+    private List<CategoriesAllDto> getCategories(List<Categories> categoriesList, Long parentId) {
+        List<CategoriesAllDto> categoriesAllDtoList = new ArrayList<>();
+        categoriesList.forEach((item)->{
+            if(Objects.equals(item.getParentId(), parentId)){
+                CategoriesAllDto categoriesAllDto =new CategoriesAllDto();
+                categoriesAllDto.setId(item.getId());
+                categoriesAllDto.setName(item.getName());
+                categoriesAllDto.setParentId(item.getParentId());
+                categoriesAllDto.setAlias(item.getAlias());
+
+                categoriesAllDtoList.add(categoriesAllDto);
+                List<CategoriesAllDto> childCategories = getCategories(categoriesList,item.getId());
+                categoriesAllDto.setChildren(childCategories);
+            }
+        });
+
+
+        return categoriesAllDtoList;
+
     }
 
     public Boolean updateCategory(Categories category) {
