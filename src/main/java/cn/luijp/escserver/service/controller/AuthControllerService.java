@@ -11,4 +11,8 @@ public interface AuthControllerService {
 
     Login auth(HttpServletRequest request);
 
+    public void recordFailed(String ip);
+
+    public Boolean checkRate(String ip);
+
 }

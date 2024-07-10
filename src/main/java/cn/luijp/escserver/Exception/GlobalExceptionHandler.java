@@ -23,6 +23,11 @@ public class GlobalExceptionHandler {
         return ResponseDto.error(-405, "attach file not found");
     }
 
+    @ExceptionHandler(TooManyRequestException.class)
+    public ResponseDto<Object> TooManyRequestException(Exception ex) {
+        return ResponseDto.error(-429, "too many request");
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseDto<Object> globalException(Exception ex) {
         log.error(ex.getMessage());

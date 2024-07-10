@@ -1,5 +1,6 @@
 package cn.luijp.escserver.controller;
 
+import cn.luijp.escserver.Exception.TooManyRequestException;
 import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.Auth;
 import cn.luijp.escserver.model.entity.Login;
@@ -35,9 +36,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseDto<Object> login(@RequestBody Auth auth, HttpServletResponse response) {
+    public ResponseDto<Object> login(@RequestBody Auth auth, HttpServletResponse response, HttpServletRequest request) {
+        if(!authControllerService.checkRate(request.getRemoteAddr())){
+            throw new TooManyRequestException();
+        }
         Login login = authControllerService.login(auth.getUsername(), auth.getPassword());
         if (login == null) {
+            authControllerService.recordFailed(request.getRemoteAddr());
             return ResponseDto.error(-1, "Login failed");
         }
         Cookie cookie = new Cookie("jwt", login.getToken());

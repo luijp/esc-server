@@ -1,5 +1,7 @@
 package cn.luijp.escserver.model.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
@@ -15,5 +17,6 @@ public class Attach {
 
     private String path;
 
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 }

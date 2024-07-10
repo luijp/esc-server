@@ -2,8 +2,10 @@ package cn.luijp.escserver.service.controller.impl;
 
 import cn.luijp.escserver.model.entity.Auth;
 import cn.luijp.escserver.model.entity.Login;
+import cn.luijp.escserver.model.entity.LoginFailed;
 import cn.luijp.escserver.service.controller.AuthControllerService;
 import cn.luijp.escserver.service.db.IAuthService;
+import cn.luijp.escserver.service.db.ILoginFailedService;
 import cn.luijp.escserver.service.db.ILoginService;
 import cn.luijp.escserver.util.JwtUtil;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -15,7 +17,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,11 +31,14 @@ public class AuthControllerServiceImpl implements AuthControllerService {
 
     private final ILoginService loginService;
 
+    private final ILoginFailedService loginFailedService;
+
     @Autowired
-    public AuthControllerServiceImpl(JwtUtil jwtUtil, IAuthService authService, ILoginService loginService) {
+    public AuthControllerServiceImpl(JwtUtil jwtUtil, IAuthService authService, ILoginService loginService, ILoginFailedService loginFailedService) {
         this.jwtUtil = jwtUtil;
         this.authService = authService;
         this.loginService = loginService;
+        this.loginFailedService = loginFailedService;
     }
 
     public Login login(String username, String password) {
@@ -47,7 +54,7 @@ public class AuthControllerServiceImpl implements AuthControllerService {
             Login login = new Login();
             login.setUuid(uuid);
             login.setToken(token);
-            login.setLoginTime(LocalDateTime.now());
+            login.setCreateTime(LocalDateTime.now());
             loginService.save(login);
             return login;
         }
@@ -79,5 +86,19 @@ public class AuthControllerServiceImpl implements AuthControllerService {
             }
         }
         return null;
+    }
+
+    public void recordFailed(String ip) {
+        LoginFailed loginFailed = new LoginFailed();
+        loginFailed.setIp(ip);
+        loginFailedService.save(loginFailed);
+    }
+
+    public Boolean checkRate(String ip) {
+        LocalDateTime oneDayBefore = LocalDateTime.now().minus(Duration.ofDays(1));
+        LambdaQueryWrapper<LoginFailed> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.gt(LoginFailed::getCreateTime,oneDayBefore).eq(LoginFailed::getIp, ip);
+        List<LoginFailed> loginFailedList = loginFailedService.list(queryWrapper);
+        return loginFailedList.size() < 30;
     }
 }

@@ -1,5 +1,7 @@
 package cn.luijp.escserver.model.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -13,7 +15,8 @@ public class Login {
 
     private String token;
 
-    private LocalDateTime loginTime;
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
     private String ip;
 

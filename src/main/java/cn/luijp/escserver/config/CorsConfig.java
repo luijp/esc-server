@@ -11,7 +11,7 @@ import java.util.List;
 public class CorsConfig implements WebMvcConfigurer {
 
     @Value("${esc.cors-domain}")
-    private List<String> corsDomain;
+    private String corsDomain;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -19,6 +19,6 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedMethods("GET", "POST")
                 .allowedHeaders("*").
-                allowedOrigins(String.valueOf(corsDomain));
+                allowedOrigins(corsDomain);
     }
 }
