@@ -9,9 +9,12 @@ import cn.luijp.escserver.service.controller.TagsControllerService;
 import cn.luijp.escserver.service.db.IPostTagsService;
 import cn.luijp.escserver.service.db.ITagsService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.yulichang.toolkit.JoinWrappers;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.HTML;
 import java.util.List;
 import java.util.Objects;
 
@@ -70,8 +73,14 @@ public class TagsControllerServiceImpl implements TagsControllerService {
     }
 
     public List<PostTagsWithTagsVo> getTagsByPostId(Long postId) {
-        LambdaQueryWrapper<PostTags> postTagsLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        postTagsLambdaQueryWrapper.eq(PostTags::getPostId, postId);
-        return postTagsMapper.getPostTagsWithTags(postTagsLambdaQueryWrapper);
+        MPJLambdaWrapper<PostTags> wrapper = JoinWrappers.lambda(PostTags.class)
+                .selectAs(PostTags::getId,PostTagsWithTagsVo::getPostTagsId)
+                .selectAs(PostTags::getPostId,PostTagsWithTagsVo::getPostId)
+                .selectAs(PostTags::getTagId,PostTagsWithTagsVo::getTagId)
+                .selectAs(Tags::getName,PostTagsWithTagsVo::getTagName)
+                .selectAs(Tags::getAlias,PostTagsWithTagsVo::getTagAlias)
+                .leftJoin(Tags.class, Tags::getId, PostTags::getTagId)
+                .eq(PostTags::getPostId, postId);
+        return postTagsMapper.selectJoinList(PostTagsWithTagsVo.class,wrapper);
     }
 }

@@ -4,11 +4,16 @@ import cn.luijp.escserver.mapper.PostCategoriesMapper;
 import cn.luijp.escserver.model.dto.CategoriesAllDto;
 import cn.luijp.escserver.model.entity.Categories;
 import cn.luijp.escserver.model.entity.PostCategories;
+import cn.luijp.escserver.model.entity.PostTags;
+import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.model.vo.PostCategoriesWithCategoriesVo;
+import cn.luijp.escserver.model.vo.PostTagsWithTagsVo;
 import cn.luijp.escserver.service.controller.CategoriesControllerService;
 import cn.luijp.escserver.service.db.ICategoriesService;
 import cn.luijp.escserver.service.db.IPostCategoriesService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.yulichang.toolkit.JoinWrappers;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,9 +105,14 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
     }
 
     public List<PostCategoriesWithCategoriesVo> getCategoriesByPostId(Long postId) {
-        LambdaQueryWrapper<PostCategories> postCategoriesQueryWrapper = new LambdaQueryWrapper<>();
-        postCategoriesQueryWrapper.eq(PostCategories::getPostId, postId);
-        return postCategoriesMapper.getPostCategoriesWithCategories(postCategoriesQueryWrapper);
-
+        MPJLambdaWrapper<PostCategories> wrapper = JoinWrappers.lambda(PostCategories.class)
+                .selectAs(PostCategories::getId, PostCategoriesWithCategoriesVo::getPostCategoriesId)
+                .selectAs(PostCategories::getPostId,PostCategoriesWithCategoriesVo::getPostId)
+                .selectAs(PostCategories::getCategoryId,PostCategoriesWithCategoriesVo::getCategoryId)
+                .selectAs(Categories::getName,PostCategoriesWithCategoriesVo::getCategoryName)
+                .selectAs(Categories::getAlias,PostCategoriesWithCategoriesVo::getCategoryAlias)
+                .leftJoin(Categories.class, Categories::getId, PostCategories::getCategoryId)
+                .eq(PostCategories::getPostId, postId);
+        return postCategoriesMapper.selectJoinList(PostCategoriesWithCategoriesVo.class,wrapper);
     }
 }

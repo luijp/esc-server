@@ -36,6 +36,11 @@ public class PostsControllerServiceImpl implements PostsControllerService {
 
     private final PostCategoriesMapper postCategoriesMapper;
 
+    private final CategoriesControllerServiceImpl categoriesControllerService;
+
+    private final TagsControllerServiceImpl tagsControllerService;
+    private final TagsControllerServiceImpl tagsControllerServiceImpl;
+
     @Autowired
     public PostsControllerServiceImpl(IPostsService postsService,
                                       IPostTagsService postTagsService,
@@ -43,7 +48,9 @@ public class PostsControllerServiceImpl implements PostsControllerService {
                                       ITagsService tagsService,
                                       ICategoriesService categoriesService,
                                       PostTagsMapper postTagsMapper,
-                                      PostCategoriesMapper postCategoriesMapper) {
+                                      PostCategoriesMapper postCategoriesMapper,
+                                      CategoriesControllerServiceImpl categoriesControllerService,
+                                      TagsControllerServiceImpl tagsControllerService, TagsControllerServiceImpl tagsControllerServiceImpl) {
         this.postsService = postsService;
         this.postTagsService = postTagsService;
         this.postCategoriesService = postCategoriesService;
@@ -51,6 +58,9 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         this.categoriesService = categoriesService;
         this.postTagsMapper = postTagsMapper;
         this.postCategoriesMapper = postCategoriesMapper;
+        this.categoriesControllerService = categoriesControllerService;
+        this.tagsControllerService = tagsControllerService;
+        this.tagsControllerServiceImpl = tagsControllerServiceImpl;
     }
 
     public Long updatePost(Posts posts) {
@@ -96,16 +106,6 @@ public class PostsControllerServiceImpl implements PostsControllerService {
             return postsListDto;
         }
 
-        //获取文章TAG
-        LambdaQueryWrapper<PostTags> postTagsLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        postTagsLambdaQueryWrapper.in(PostTags::getPostId, postIdsList);
-        List<PostTagsWithTagsVo> postTagsWithTagsList = postTagsMapper.getPostTagsWithTags(postTagsLambdaQueryWrapper);
-
-        //获取文章分类
-        LambdaQueryWrapper<PostCategories> postCategoriesLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        postCategoriesLambdaQueryWrapper.in(PostCategories::getPostId, postIdsList);
-        List<PostCategoriesWithCategoriesVo> postCategoriesWithCategoriesList = postCategoriesMapper.getPostCategoriesWithCategories(postCategoriesLambdaQueryWrapper);
-
         //将分类信息和TAGS插入文章数据中
         List<PostsWithTC> postsWithTCList = new ArrayList<>();
         postsList.forEach(item -> {
@@ -119,8 +119,8 @@ public class PostsControllerServiceImpl implements PostsControllerService {
             pwt.setVisible(item.getVisible());
             pwt.setEncrypt(item.getEncrypt());
             pwt.setType(item.getType());
-            pwt.setTags(postTagsWithTagsList);
-            pwt.setCategories(postCategoriesWithCategoriesList);
+            pwt.setTags(tagsControllerServiceImpl.getTagsByPostId(item.getId()));
+            pwt.setCategories(categoriesControllerService.getCategoriesByPostId(item.getId()));
             postsWithTCList.add(pwt);
 
         });
