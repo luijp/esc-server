@@ -18,7 +18,7 @@ public class CommentController {
         this.commentControllerService = commentControllerService;
     }
 
-    @GetMapping("/list/{postId}/{pageNum}/{pageSize}")
+    @PostMapping("/list/{postId}/{pageNum}/{pageSize}")
     public ResponseDto<CommentListDto> list(@PathVariable Long postId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         CommentListDto comment = commentControllerService.getComment(postId, pageNum, pageSize);
         return ResponseDto.successWithData(comment);
