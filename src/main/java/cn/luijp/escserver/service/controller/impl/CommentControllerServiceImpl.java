@@ -20,9 +20,14 @@ public class CommentControllerServiceImpl implements CommentControllerService {
         this.commentService = commentService;
     }
 
-    public Boolean addComment(Comment comment) {
+    public Long addComment(Comment comment) {
         comment.setVisible(false);
-        return commentService.save(comment);
+        boolean status = commentService.save(comment);
+        if(status){
+            return comment.getId();
+        }else{
+            return null;
+        }
     }
 
     public Boolean delComment(Long id) {

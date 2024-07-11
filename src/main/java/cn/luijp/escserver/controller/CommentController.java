@@ -25,10 +25,10 @@ public class CommentController {
     }
 
     @PostMapping("/add")
-    public ResponseDto<Object> add(@RequestBody Comment comment) {
-        Boolean status = commentControllerService.addComment(comment);
-        if (status) {
-            return ResponseDto.success();
+    public ResponseDto<Long> add(@RequestBody Comment comment) {
+        Long id = commentControllerService.addComment(comment);
+        if (id != null) {
+            return ResponseDto.successWithData(id);
         } else {
             return ResponseDto.error(-1, "Comment add failed");
         }

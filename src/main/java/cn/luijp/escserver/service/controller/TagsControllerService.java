@@ -9,7 +9,7 @@ public interface TagsControllerService {
 
     List<Tags> getAllTags();
 
-    Boolean updateTag(Tags tag);
+    Long updateTag(Tags tag);
 
     Boolean delTag(Tags tag);
 

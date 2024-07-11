@@ -31,10 +31,10 @@ public class TagsController {
     }
 
     @PostMapping("/update")
-    public ResponseDto<Boolean> updateTag(@RequestBody Tags tag) {
-        Boolean status = tagsControllerService.updateTag(tag);
-        if (status) {
-            return ResponseDto.success();
+    public ResponseDto<Long> updateTag(@RequestBody Tags tag) {
+        Long id = tagsControllerService.updateTag(tag);
+        if (id != null) {
+            return ResponseDto.successWithData(id);
         } else {
             return ResponseDto.error(-1, "Tag update failed");
         }

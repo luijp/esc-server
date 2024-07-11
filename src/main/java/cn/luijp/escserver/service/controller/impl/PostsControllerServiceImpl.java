@@ -53,8 +53,12 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         this.postCategoriesMapper = postCategoriesMapper;
     }
 
-    public Boolean updatePost(Posts posts) {
-        return postsService.saveOrUpdate(posts);
+    public Long updatePost(Posts posts) {
+        boolean status = postsService.saveOrUpdate(posts);
+        if(status){
+            return posts.getId();
+        }
+        return null;
     }
 
     public Boolean delPost(Long id) {

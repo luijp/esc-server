@@ -5,7 +5,7 @@ import cn.luijp.escserver.model.entity.Comment;
 
 public interface CommentControllerService {
 
-    Boolean addComment(Comment comment);
+    Long addComment(Comment comment);
 
     Boolean delComment(Long id);
 

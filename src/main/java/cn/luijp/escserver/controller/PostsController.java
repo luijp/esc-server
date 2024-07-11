@@ -26,10 +26,10 @@ public class PostsController {
     }
 
     @PostMapping("/update")
-    public ResponseDto<Posts> update(@RequestBody Posts posts) {
-        Boolean status = postsControllerService.updatePost(posts);
-        if (status) {
-            return ResponseDto.success();
+    public ResponseDto<Long> update(@RequestBody Posts posts) {
+        Long id = postsControllerService.updatePost(posts);
+        if (id != null) {
+            return ResponseDto.successWithData(id);
         } else {
             return ResponseDto.error(-1, "Post update failed");
         }

@@ -65,14 +65,19 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
 
     }
 
-    public Boolean updateCategory(Categories category) {
+    public Long updateCategory(Categories category) {
         if (Objects.equals(category.getName(), "")) {
-            return delCategory(category);
+            delCategory(category);
+            return 0L;
         }
         try {
-            return categoriesService.saveOrUpdate(category);
+            boolean status = categoriesService.saveOrUpdate(category);
+            if(status){
+                return category.getId();
+            }
+            return null;
         } catch (Exception ex) {
-            return false;
+            return null;
         }
     }
 

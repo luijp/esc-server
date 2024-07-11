@@ -10,7 +10,7 @@ public interface CategoriesControllerService {
 
     List<CategoriesAllDto> getAllCategories();
 
-    Boolean updateCategory(Categories category);
+    Long updateCategory(Categories category);
 
     Boolean delCategory(Categories category);
 

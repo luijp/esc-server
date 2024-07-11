@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PostsControllerService {
 
-    Boolean updatePost(Posts posts);
+    Long updatePost(Posts posts);
 
     Boolean delPost(Long id);
 

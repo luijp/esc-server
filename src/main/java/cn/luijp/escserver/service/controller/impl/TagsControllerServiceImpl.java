@@ -35,14 +35,19 @@ public class TagsControllerServiceImpl implements TagsControllerService {
         return tagsService.list();
     }
 
-    public Boolean updateTag(Tags tag) {
+    public Long updateTag(Tags tag) {
         if (Objects.equals(tag.getName(), "")) {
-            return delTag(tag);
+            delTag(tag);
+            return 0L;
         }
         try {
-            return tagsService.saveOrUpdate(tag);
+            boolean status = tagsService.saveOrUpdate(tag);
+            if(status){
+                return tag.getId();
+            }
+            return null;
         } catch (Exception ex) {
-            return false;
+            return null;
         }
 
     }

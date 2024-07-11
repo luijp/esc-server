@@ -32,10 +32,10 @@ public class CategoriesController {
     }
 
     @PostMapping("/update")
-    public ResponseDto<Boolean> updateCategory(@RequestBody Categories categories) {
-        Boolean status = categoriesControllerService.updateCategory(categories);
-        if (status) {
-            return ResponseDto.success();
+    public ResponseDto<Long> updateCategory(@RequestBody Categories categories) {
+        Long id = categoriesControllerService.updateCategory(categories);
+        if (id != null) {
+            return ResponseDto.successWithData(id);
         } else {
             return ResponseDto.error(-1, "Category update failed");
         }
