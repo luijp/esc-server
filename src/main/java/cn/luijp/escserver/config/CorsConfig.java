@@ -6,20 +6,29 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
+import java.util.Objects;
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
-    @Value("${esc.cors-domain}")
+    @Value("${esc.cors-domain:}")
     private String corsDomain;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 
-        registry.addMapping("/**")
-                .allowedMethods("GET", "POST")
-                .allowedHeaders("*")
-                .allowedOrigins(corsDomain)
-                .allowCredentials(true);
+        if(Objects.equals(corsDomain, "")){
+            registry.addMapping("/**")
+                    .allowedMethods("GET", "POST")
+                    .allowedHeaders("*");
+        }else{
+            registry.addMapping("/**")
+                    .allowedMethods("GET", "POST")
+                    .allowCredentials(true)
+                    .allowedOrigins(corsDomain)
+                    .allowedHeaders("*");
+
+        }
+
     }
 }
