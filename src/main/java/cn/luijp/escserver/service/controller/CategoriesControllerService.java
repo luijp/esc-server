@@ -19,4 +19,6 @@ public interface CategoriesControllerService {
     List<PostCategoriesWithCategoriesVo> getCategoriesByPostId(Long postId);
 
     public List<Categories> getCategoriesList();
+
+    public Categories getCategoryIdByAlias(String categoryAlias);
 }

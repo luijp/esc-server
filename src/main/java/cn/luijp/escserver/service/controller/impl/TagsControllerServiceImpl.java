@@ -2,6 +2,7 @@ package cn.luijp.escserver.service.controller.impl;
 
 
 import cn.luijp.escserver.mapper.PostTagsMapper;
+import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.PostTags;
 import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.model.vo.PostTagsWithTagsVo;
@@ -82,5 +83,11 @@ public class TagsControllerServiceImpl implements TagsControllerService {
                 .leftJoin(Tags.class, Tags::getId, PostTags::getTagId)
                 .eq(PostTags::getPostId, postId);
         return postTagsMapper.selectJoinList(PostTagsWithTagsVo.class,wrapper);
+    }
+
+    public Tags getTagIdByAlias(String tagAlias) {
+        LambdaQueryWrapper<Tags> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Tags::getAlias,tagAlias);
+        return tagsService.getOne(wrapper);
     }
 }

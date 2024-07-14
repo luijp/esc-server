@@ -49,6 +49,12 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
         return categoriesService.list();
     }
 
+    public Categories getCategoryIdByAlias(String categoryAlias) {
+        LambdaQueryWrapper<Categories> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Categories::getAlias,categoryAlias);
+        return categoriesService.getOne(queryWrapper);
+    }
+
     private List<CategoriesAllDto> getCategories(List<Categories> categoriesList, Long parentId) {
         List<CategoriesAllDto> categoriesAllDtoList = new ArrayList<>();
         categoriesList.forEach((item)->{
