@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostsControllerServiceImpl implements PostsControllerService {
@@ -83,12 +84,40 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         return post;
     }
 
-    public PostsListDto getPostsList(Integer pageNum, Integer pageSize, Integer type) {
+    public PostsListDto getPostsList(Integer pageNum, Integer pageSize, Integer type){
+        return packagePost(pageNum,pageSize,type,1,null);
+    }
+
+    public PostsListDto getPostsListByTag(Integer pageNum, Integer pageSize, Integer type, Long tagId){
+        return packagePost(pageNum,pageSize,type,2,tagId);
+    }
+
+    public PostsListDto getPostsListByCategory(Integer pageNum, Integer pageSize, Integer type, Long categoryId){
+        return packagePost(pageNum,pageSize,type,3,categoryId);
+    }
+
+    private PostsListDto packagePost(Integer pageNum, Integer pageSize, Integer type, Integer filter,Long id) {
 
         IPage<Posts> postsPage = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Posts> postsQueryWrapper = new LambdaQueryWrapper<>();
-        postsQueryWrapper.eq(Posts::getType, type).eq(Posts::getVisible, true);
 
+        if(filter == 1){
+            //全部
+            postsQueryWrapper.eq(Posts::getType, type).eq(Posts::getVisible, true);
+        }else if(filter ==2) {
+            //TAG
+            LambdaQueryWrapper<PostTags> postTagsLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            postTagsLambdaQueryWrapper.eq(PostTags::getTagId,id);
+            List<Long> postTagsList = postTagsService.list(postTagsLambdaQueryWrapper).stream().map(PostTags::getPostId).toList();
+            postsQueryWrapper.eq(Posts::getType, 1).eq(Posts::getVisible, true)
+                    .in(Posts::getId, postTagsList);
+        }else if(filter == 3){
+            LambdaQueryWrapper<PostCategories> postCategoriesLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            postCategoriesLambdaQueryWrapper.eq(PostCategories::getCategoryId,id);
+            List<Long> postCategoriesList = postCategoriesService.list(postCategoriesLambdaQueryWrapper).stream().map(PostCategories::getPostId).collect(Collectors.toList());
+            postsQueryWrapper.eq(Posts::getType, 1).eq(Posts::getVisible, true)
+                    .in(Posts::getId, postCategoriesList);
+        }
         //获得文章列表
         IPage<Posts> postPage = postsService.page(postsPage, postsQueryWrapper);
         List<Posts> postsList = postPage.getRecords();

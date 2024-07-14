@@ -18,4 +18,8 @@ public interface PostsControllerService {
     Boolean addTags(Long postId, List<Long> tagIds);
 
     Boolean addCategories(Long postId, List<Long> categoryIds);
+
+    PostsListDto getPostsListByTag(Integer pageNum, Integer pageSize, Integer type, Long tagId);
+
+    PostsListDto getPostsListByCategory(Integer pageNum, Integer pageSize, Integer type, Long categoryId);
 }

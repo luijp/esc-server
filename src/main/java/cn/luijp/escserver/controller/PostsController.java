@@ -21,8 +21,18 @@ public class PostsController {
     }
 
     @GetMapping("/list/{pageNum}/{pageSize}/{type}")
-    public ResponseDto<PostsListDto> list(@PathVariable int pageNum, @PathVariable int pageSize, @PathVariable String type) {
-        return ResponseDto.successWithData(postsControllerService.getPostsList(pageNum, pageSize, Integer.parseInt(type)));
+    public ResponseDto<PostsListDto> list(@PathVariable int pageNum, @PathVariable int pageSize, @PathVariable Integer type) {
+        return ResponseDto.successWithData(postsControllerService.getPostsList(pageNum, pageSize, type));
+    }
+
+    @GetMapping("/list/{pageNum}/{pageSize}/{type}/{id}")
+    public ResponseDto<PostsListDto> listByTagId(@PathVariable int pageNum, @PathVariable int pageSize, @PathVariable Integer type, @PathVariable Long id) {
+        return ResponseDto.successWithData(postsControllerService.getPostsListByTag(pageNum, pageSize, type,id));
+    }
+
+    @GetMapping("/list/{pageNum}/{pageSize}/{type}")
+    public ResponseDto<PostsListDto> listByCategoryId(@PathVariable int pageNum, @PathVariable int pageSize, @PathVariable Integer type, @PathVariable Long id) {
+        return ResponseDto.successWithData(postsControllerService.getPostsListByCategory(pageNum, pageSize, type,id));
     }
 
     @PostMapping("/update")
