@@ -48,19 +48,19 @@ public class AttachController {
     }
 
     @GetMapping("/image/{uuid}")
-    public byte[] image(HttpServletResponse response, @PathVariable String uuid) {
+    public void image(HttpServletResponse response, @PathVariable String uuid) {
         response.reset();
-        response.setContentType("image/jpeg");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + attachControllerService.getOriginName(uuid) + "\"");
-        return attachControllerService.get(uuid);
+        response.setContentType("image/png");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"" + attachControllerService.getOriginName(uuid) + "\"");
+        attachControllerService.get(uuid,response);
     }
 
     @GetMapping("/download/{uuid}")
-    public byte[] download(HttpServletResponse response, @PathVariable String uuid) {
+    public void download(HttpServletResponse response, @PathVariable String uuid) {
         response.reset();
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + attachControllerService.getOriginName(uuid) + "\"");
-        return attachControllerService.get(uuid);
+        attachControllerService.get(uuid, response);
     }
 
     @PostMapping("/del/{uuid}")

@@ -1,11 +1,12 @@
 package cn.luijp.escserver.service.controller;
 
 import cn.luijp.escserver.model.dto.AttachListDto;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface AttachControllerService {
 
-    byte[] get(String uuid);
+    void get(String uuid, HttpServletResponse response);
 
     String upload(MultipartFile file);
 

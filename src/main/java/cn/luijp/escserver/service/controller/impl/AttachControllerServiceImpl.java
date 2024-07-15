@@ -7,14 +7,17 @@ import cn.luijp.escserver.service.controller.AttachControllerService;
 import cn.luijp.escserver.service.db.IAttachService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +35,7 @@ public class AttachControllerServiceImpl implements AttachControllerService {
         this.attachService = attachService;
     }
 
-    public byte[] get(String uuid) {
+    public void get(String uuid, HttpServletResponse response) {
         if (uuid == null || uuid.isEmpty()) {
             throw new AttachFileNotFoundException();
         }
@@ -43,12 +46,15 @@ public class AttachControllerServiceImpl implements AttachControllerService {
 
         try {
 
-            File file = new File(filePath + "/" + attach.getPath() + "/" + attach.getUuid());
-            FileInputStream inputStream = new FileInputStream(file);
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes, 0, inputStream.available());
-            inputStream.close();
-            return bytes;
+            FileInputStream file = new FileInputStream(filePath + "/" + attach.getPath() + "/" + attach.getUuid());
+            BufferedInputStream bis = new BufferedInputStream(file);
+            OutputStream os = response.getOutputStream();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = bis.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            os.flush();
         } catch (Exception ex) {
             throw new AttachFileNotFoundException();
         }
