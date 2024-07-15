@@ -7,6 +7,7 @@ import cn.luijp.escserver.service.controller.AttachControllerService;
 import cn.luijp.escserver.service.db.IAttachService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class AttachControllerServiceImpl implements AttachControllerService {
 
@@ -98,6 +100,7 @@ public class AttachControllerServiceImpl implements AttachControllerService {
             return uuid;
 
         } catch (Exception ex) {
+            log.error(ex.getMessage());
             return null;
         }
     }
