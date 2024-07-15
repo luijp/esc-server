@@ -32,12 +32,12 @@ public class TagsController {
     }
 
     @GetMapping("/alias/{tagAlias}")
-    public ResponseDto<Long> getTagsIdByTagAlias(@PathVariable String tagAlias) {
+    public ResponseDto<Tags> getTagsByTagAlias(@PathVariable String tagAlias) {
         Tags tagIdByAlias = tagsControllerService.getTagIdByAlias(tagAlias);
         if(tagIdByAlias == null){
             return ResponseDto.error(-404, "Tag not exist");
         }
-        return ResponseDto.successWithData(tagIdByAlias.getId());
+        return ResponseDto.successWithData(tagIdByAlias);
     }
 
     @PostMapping("/update")

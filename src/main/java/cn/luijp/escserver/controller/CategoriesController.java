@@ -33,12 +33,12 @@ public class CategoriesController {
     }
 
     @GetMapping("/alias/{categoryAlias}")
-    public ResponseDto<Long> getTagsIdByTagAlias(@PathVariable String categoryAlias) {
+    public ResponseDto<Categories> getCategoriesByTagAlias(@PathVariable String categoryAlias) {
         Categories categoryIdByAlias = categoriesControllerService.getCategoryIdByAlias(categoryAlias);
         if(categoryIdByAlias == null){
             return ResponseDto.error(-404, "Category not exist");
         }
-        return ResponseDto.successWithData(categoryIdByAlias.getId());
+        return ResponseDto.successWithData(categoryIdByAlias);
     }
 
     @PostMapping("/update")
