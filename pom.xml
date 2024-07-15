@@ -10,7 +10,7 @@
     </parent>
     <groupId>cn.luijp</groupId>
     <artifactId>esc-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>master</version>
     <name>esc-server</name>
     <description>esc-server</description>
     <url/>
