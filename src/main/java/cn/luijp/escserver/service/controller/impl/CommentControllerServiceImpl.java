@@ -53,13 +53,13 @@ public class CommentControllerServiceImpl implements CommentControllerService {
 
     public Boolean passComment(Long id) {
         LambdaUpdateWrapper<Comment> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(Comment::getId, id).set(Comment::getVisible, true);
+        updateWrapper.eq(Comment::getId, id).set(Comment::getVisible, 1);
         return commentService.update(updateWrapper);
     }
 
     public Boolean denyComment(Long id) {
         LambdaUpdateWrapper<Comment> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(Comment::getId, id).set(Comment::getVisible, false);
+        updateWrapper.eq(Comment::getId, id).set(Comment::getVisible, 0);
         return commentService.update(updateWrapper);
     }
 }

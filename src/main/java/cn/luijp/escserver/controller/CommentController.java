@@ -78,7 +78,7 @@ public class CommentController {
         if (status) {
             return ResponseDto.success();
         } else {
-            return ResponseDto.error(-1, "Comment pass failed");
+            return ResponseDto.error(-1, "Comment deny failed");
         }
     }
 }
