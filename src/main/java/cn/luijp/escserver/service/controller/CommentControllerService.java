@@ -9,7 +9,7 @@ public interface CommentControllerService {
 
     Boolean delComment(Long id);
 
-    CommentListDto getComment(Long postId, Integer pageNum, Integer pageSize);
+    CommentListDto getComment(Long postId, Integer pageNum, Integer pageSize, Boolean visible);
 
     Boolean passComment(Long id);
 }
