@@ -36,8 +36,11 @@ public class CommentControllerServiceImpl implements CommentControllerService {
 
     public CommentListDto getComment(Long postId, Integer pageNum, Integer pageSize, Boolean visible) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+        if(postId != null){
+            queryWrapper.eq(Comment::getPostId, postId);
+        }
         if (visible != null){
-            queryWrapper.eq(Comment::getPostId, postId).eq(Comment::getVisible,visible);
+            queryWrapper.eq(Comment::getVisible,visible);
         }
         Page<Comment> commentPage = commentService.page(new Page<>(pageNum, pageSize), queryWrapper);
         CommentListDto commentListDto = new CommentListDto();

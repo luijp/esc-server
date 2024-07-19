@@ -31,8 +31,14 @@ public class CommentController {
     }
 
     @PostMapping("/listAll/{postId}/{pageNum}/{pageSize}")
-    public ResponseDto<CommentListDto> listAll(@PathVariable Long postId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+    public ResponseDto<CommentListDto> listAllByPostId(@PathVariable Long postId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         CommentListDto comment = commentControllerService.getComment(postId, pageNum, pageSize,null);
+        return ResponseDto.successWithData(comment);
+    }
+
+    @PostMapping("/listAll/{pageNum}/{pageSize}")
+    public ResponseDto<CommentListDto> listAll(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+        CommentListDto comment = commentControllerService.getComment(null, pageNum, pageSize,null);
         return ResponseDto.successWithData(comment);
     }
 
