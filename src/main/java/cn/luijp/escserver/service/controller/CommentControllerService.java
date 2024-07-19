@@ -12,4 +12,6 @@ public interface CommentControllerService {
     CommentListDto getComment(Long postId, Integer pageNum, Integer pageSize, Boolean visible);
 
     Boolean passComment(Long id);
+
+    Boolean denyComment(Long id);
 }

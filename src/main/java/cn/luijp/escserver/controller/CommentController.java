@@ -71,4 +71,14 @@ public class CommentController {
             return ResponseDto.error(-1, "Comment pass failed");
         }
     }
+
+    @PostMapping("/deny/{id}")
+    public ResponseDto<Object> deny(@PathVariable Long id) {
+        Boolean status = commentControllerService.denyComment(id);
+        if (status) {
+            return ResponseDto.success();
+        } else {
+            return ResponseDto.error(-1, "Comment pass failed");
+        }
+    }
 }
