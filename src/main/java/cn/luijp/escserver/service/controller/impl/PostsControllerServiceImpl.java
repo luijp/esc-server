@@ -109,12 +109,18 @@ public class PostsControllerServiceImpl implements PostsControllerService {
             LambdaQueryWrapper<PostTags> postTagsLambdaQueryWrapper = new LambdaQueryWrapper<>();
             postTagsLambdaQueryWrapper.eq(PostTags::getTagId,id);
             List<Long> postTagsList = postTagsService.list(postTagsLambdaQueryWrapper).stream().map(PostTags::getPostId).toList();
+            if(postTagsList.isEmpty()){
+                return null;
+            }
             postsQueryWrapper.eq(Posts::getType, 1).eq(Posts::getVisible, true)
                     .in(Posts::getId, postTagsList);
         }else if(filter == 3){
             LambdaQueryWrapper<PostCategories> postCategoriesLambdaQueryWrapper = new LambdaQueryWrapper<>();
             postCategoriesLambdaQueryWrapper.eq(PostCategories::getCategoryId,id);
             List<Long> postCategoriesList = postCategoriesService.list(postCategoriesLambdaQueryWrapper).stream().map(PostCategories::getPostId).collect(Collectors.toList());
+            if(postCategoriesList.isEmpty()){
+                return null;
+            }
             postsQueryWrapper.eq(Posts::getType, 1).eq(Posts::getVisible, true)
                     .in(Posts::getId, postCategoriesList);
         }
