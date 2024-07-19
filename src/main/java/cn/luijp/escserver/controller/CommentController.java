@@ -24,13 +24,13 @@ public class CommentController {
         return ResponseDto.successWithData(comment);
     }
 
-    @GetMapping("/listUnVisible/{postId}/{pageNum}/{pageSize}")
+    @PostMapping("/listUnVisible/{postId}/{pageNum}/{pageSize}")
     public ResponseDto<CommentListDto> listUnVisible(@PathVariable Long postId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         CommentListDto comment = commentControllerService.getComment(postId, pageNum, pageSize,false);
         return ResponseDto.successWithData(comment);
     }
 
-    @GetMapping("/listAll/{postId}/{pageNum}/{pageSize}")
+    @PostMapping("/listAll/{postId}/{pageNum}/{pageSize}")
     public ResponseDto<CommentListDto> listAll(@PathVariable Long postId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         CommentListDto comment = commentControllerService.getComment(postId, pageNum, pageSize,null);
         return ResponseDto.successWithData(comment);
