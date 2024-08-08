@@ -42,7 +42,11 @@ public class AuthController {
         }
         Login login = authControllerService.login(auth.getUsername(), auth.getPassword());
         if (login == null) {
-            authControllerService.recordFailed(request.getRemoteAddr());
+            String clientIp = request.getHeader("X-Forwarded-For");
+            if (clientIp == null || clientIp.isEmpty()) {
+                clientIp = request.getRemoteAddr();
+            }
+            authControllerService.recordFailed(clientIp);
             return ResponseDto.error(-1, "Login failed");
         }
         Cookie cookie = new Cookie("jwt", login.getToken());
