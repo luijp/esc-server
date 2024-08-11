@@ -30,9 +30,9 @@ public class Posts {
     private LocalDateTime updateTime;
 
     /**
-     * 是否隐藏
+     * 是否隐藏，0:隐藏，1:显示，2:登录可见
      */
-    private Boolean visible;
+    private Integer visible;
 
     /**
      * 是否加密

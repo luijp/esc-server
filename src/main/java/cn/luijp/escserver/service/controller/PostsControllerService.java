@@ -13,13 +13,13 @@ public interface PostsControllerService {
 
     Posts getPost(Long id);
 
-    PostsListDto getPostsList(Integer pageNum, Integer pageSize, Integer type);
+    PostsListDto getPostsList(Integer pageNum, Integer pageSize, Integer type, Integer visible);
 
     Boolean addTags(Long postId, List<Long> tagIds);
 
     Boolean addCategories(Long postId, List<Long> categoryIds);
 
-    PostsListDto getPostsListByTag(Integer pageNum, Integer pageSize, Integer type, Long tagId);
+    PostsListDto getPostsListByTag(Integer pageNum, Integer pageSize, Integer type, Long tagId, Integer visible);
 
-    PostsListDto getPostsListByCategory(Integer pageNum, Integer pageSize, Integer type, Long categoryId);
+    PostsListDto getPostsListByCategory(Integer pageNum, Integer pageSize, Integer type, Long categoryId, Integer visible);
 }

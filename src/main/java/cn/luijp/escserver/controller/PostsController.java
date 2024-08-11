@@ -2,8 +2,11 @@ package cn.luijp.escserver.controller;
 
 import cn.luijp.escserver.model.dto.PostsListDto;
 import cn.luijp.escserver.model.dto.ResponseDto;
+import cn.luijp.escserver.model.entity.Login;
 import cn.luijp.escserver.model.entity.Posts;
+import cn.luijp.escserver.service.controller.AuthControllerService;
 import cn.luijp.escserver.service.controller.PostsControllerService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,25 +17,70 @@ import java.util.List;
 public class PostsController {
 
     private final PostsControllerService postsControllerService;
+    private final AuthControllerService authControllerService;
 
     @Autowired
-    public PostsController(PostsControllerService postsControllerService) {
+    public PostsController(PostsControllerService postsControllerService, AuthControllerService authControllerService) {
         this.postsControllerService = postsControllerService;
+        this.authControllerService = authControllerService;
     }
 
     @GetMapping("/list/{pageNum}/{pageSize}/{type}")
-    public ResponseDto<PostsListDto> list(@PathVariable int pageNum, @PathVariable int pageSize, @PathVariable Integer type) {
-        return ResponseDto.successWithData(postsControllerService.getPostsList(pageNum, pageSize, type));
+    public ResponseDto<PostsListDto> list(@PathVariable int pageNum,
+                                          @PathVariable int pageSize,
+                                          @PathVariable Integer type,
+                                          HttpServletRequest request
+    ) {
+        Login auth = authControllerService.auth(request);
+        Integer visible = 1;
+        if (auth != null) {
+            visible = 2;
+        }
+        return ResponseDto.successWithData(postsControllerService.getPostsList(pageNum, pageSize, type, visible));
+    }
+
+    @GetMapping("/list_full/{pageNum}/{pageSize}/{type}")
+    public ResponseDto<PostsListDto> listFull(@PathVariable int pageNum,
+                                              @PathVariable int pageSize,
+                                              @PathVariable Integer type,
+                                              HttpServletRequest request
+    ) {
+        Login auth = authControllerService.auth(request);
+        Integer visible = 1;
+        if (auth != null) {
+            visible = 2;
+        }
+        return ResponseDto.successWithData(postsControllerService.getPostsList(pageNum, pageSize, type, visible));
     }
 
     @GetMapping("/list/tags/{pageNum}/{pageSize}/{type}/{id}")
-    public ResponseDto<PostsListDto> listByTagId(@PathVariable int pageNum, @PathVariable int pageSize, @PathVariable Integer type, @PathVariable Long id) {
-        return ResponseDto.successWithData(postsControllerService.getPostsListByTag(pageNum, pageSize, type,id));
+    public ResponseDto<PostsListDto> listByTagId(@PathVariable int pageNum,
+                                                 @PathVariable int pageSize,
+                                                 @PathVariable Integer type,
+                                                 @PathVariable Long id,
+                                                 HttpServletRequest request
+    ) {
+        Login auth = authControllerService.auth(request);
+        Integer visible = 1;
+        if (auth != null) {
+            visible = 2;
+        }
+        return ResponseDto.successWithData(postsControllerService.getPostsListByTag(pageNum, pageSize, type, id, visible));
     }
 
     @GetMapping("/list/categories/{pageNum}/{pageSize}/{type}/{id}")
-    public ResponseDto<PostsListDto> listByCategoryId(@PathVariable int pageNum, @PathVariable int pageSize, @PathVariable Integer type, @PathVariable Long id) {
-        return ResponseDto.successWithData(postsControllerService.getPostsListByCategory(pageNum, pageSize, type,id));
+    public ResponseDto<PostsListDto> listByCategoryId(@PathVariable int pageNum,
+                                                      @PathVariable int pageSize,
+                                                      @PathVariable Integer type,
+                                                      @PathVariable Long id,
+                                                      HttpServletRequest request
+    ) {
+        Login auth = authControllerService.auth(request);
+        Integer visible = 1;
+        if (auth != null) {
+            visible = 2;
+        }
+        return ResponseDto.successWithData(postsControllerService.getPostsListByCategory(pageNum, pageSize, type, id, visible));
     }
 
     @PostMapping("/update")

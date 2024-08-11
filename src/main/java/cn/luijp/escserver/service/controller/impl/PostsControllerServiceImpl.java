@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,7 +67,7 @@ public class PostsControllerServiceImpl implements PostsControllerService {
 
     public Long updatePost(Posts posts) {
         boolean status = postsService.saveOrUpdate(posts);
-        if(status){
+        if (status) {
             return posts.getId();
         }
         return null;
@@ -84,45 +85,49 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         return post;
     }
 
-    public PostsListDto getPostsList(Integer pageNum, Integer pageSize, Integer type){
-        return packagePost(pageNum,pageSize,type,1,null);
+    public PostsListDto getPostsList(Integer pageNum, Integer pageSize, Integer type, Integer visible) {
+        return packagePost(pageNum, pageSize, type, 1, null, visible);
     }
 
-    public PostsListDto getPostsListByTag(Integer pageNum, Integer pageSize, Integer type, Long tagId){
-        return packagePost(pageNum,pageSize,type,2,tagId);
+    public PostsListDto getPostsListByTag(Integer pageNum, Integer pageSize, Integer type, Long tagId, Integer visible) {
+        return packagePost(pageNum, pageSize, type, 2, tagId, visible);
     }
 
-    public PostsListDto getPostsListByCategory(Integer pageNum, Integer pageSize, Integer type, Long categoryId){
-        return packagePost(pageNum,pageSize,type,3,categoryId);
+    public PostsListDto getPostsListByCategory(Integer pageNum, Integer pageSize, Integer type, Long categoryId, Integer visible) {
+        return packagePost(pageNum, pageSize, type, 3, categoryId, visible);
     }
 
-    private PostsListDto packagePost(Integer pageNum, Integer pageSize, Integer type, Integer filter,Long id) {
+    private PostsListDto packagePost(Integer pageNum, Integer pageSize, Integer type, Integer filter, Long id, Integer visible) {
 
         IPage<Posts> postsPage = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Posts> postsQueryWrapper = new LambdaQueryWrapper<>();
-
-        if(filter == 1){
+        if (visible == 2) {
+            postsQueryWrapper.in(Posts::getVisible, Arrays.asList(1, 2));
+        } else if (visible == -1) {
+            ;
+        } else {
+            postsQueryWrapper.eq(Posts::getVisible, visible);
+        }
+        if (filter == 1) {
             //全部
-            postsQueryWrapper.eq(Posts::getType, type).eq(Posts::getVisible, true);
-        }else if(filter ==2) {
+            postsQueryWrapper.eq(Posts::getType, type);
+        } else if (filter == 2) {
             //TAG
             LambdaQueryWrapper<PostTags> postTagsLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            postTagsLambdaQueryWrapper.eq(PostTags::getTagId,id);
+            postTagsLambdaQueryWrapper.eq(PostTags::getTagId, id);
             List<Long> postTagsList = postTagsService.list(postTagsLambdaQueryWrapper).stream().map(PostTags::getPostId).toList();
-            if(postTagsList.isEmpty()){
+            if (postTagsList.isEmpty()) {
                 return null;
             }
-            postsQueryWrapper.eq(Posts::getType, 1).eq(Posts::getVisible, true)
-                    .in(Posts::getId, postTagsList);
-        }else if(filter == 3){
+            postsQueryWrapper.eq(Posts::getType, 1).in(Posts::getId, postTagsList);
+        } else if (filter == 3) {
             LambdaQueryWrapper<PostCategories> postCategoriesLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            postCategoriesLambdaQueryWrapper.eq(PostCategories::getCategoryId,id);
+            postCategoriesLambdaQueryWrapper.eq(PostCategories::getCategoryId, id);
             List<Long> postCategoriesList = postCategoriesService.list(postCategoriesLambdaQueryWrapper).stream().map(PostCategories::getPostId).collect(Collectors.toList());
-            if(postCategoriesList.isEmpty()){
+            if (postCategoriesList.isEmpty()) {
                 return null;
             }
-            postsQueryWrapper.eq(Posts::getType, 1).eq(Posts::getVisible, true)
-                    .in(Posts::getId, postCategoriesList);
+            postsQueryWrapper.eq(Posts::getType, 1).in(Posts::getId, postCategoriesList);
         }
         //获得文章列表
         IPage<Posts> postPage = postsService.page(postsPage, postsQueryWrapper);
