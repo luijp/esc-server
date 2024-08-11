@@ -99,6 +99,7 @@ public class PostsControllerServiceImpl implements PostsControllerService {
 
         IPage<Posts> postsPage = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Posts> postsQueryWrapper = new LambdaQueryWrapper<>();
+        postsQueryWrapper.orderByDesc(Posts::getId);
         if (visible == 2) {
             postsQueryWrapper.in(Posts::getVisible, Arrays.asList(1, 2));
         } else if (visible == -1) {
