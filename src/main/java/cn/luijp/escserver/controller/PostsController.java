@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -113,6 +114,29 @@ public class PostsController {
         if (auth == null) {
             if(post.getVisible() != 1){
                 return ResponseDto.error(-403, "Auth required");
+            }
+            if(post.getEncrypt() != null && !post.getEncrypt().isEmpty()){
+                return ResponseDto.error(-403, "Auth required");
+            }
+        }
+        return ResponseDto.successWithData(post);
+    }
+
+    @PostMapping("/get/{id}")
+    public ResponseDto<Posts> getEncrypt(@PathVariable Long id,
+                                  @RequestBody String encrypt,
+                                  HttpServletRequest request) {
+        Posts post = postsControllerService.getPost(id);
+        if(post == null){
+            return ResponseDto.error(-404, "Post not found");
+        }
+        Login auth = authControllerService.auth(request);
+        if (auth == null) {
+            if(post.getVisible() != 1){
+                return ResponseDto.error(-403, "Auth required");
+            }
+            if(!Objects.equals(post.getEncrypt(), encrypt)){
+                return ResponseDto.error(-403, "Password not match");
             }
         }
         return ResponseDto.successWithData(post);
