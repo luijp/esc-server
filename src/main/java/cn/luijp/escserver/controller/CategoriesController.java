@@ -3,7 +3,6 @@ package cn.luijp.escserver.controller;
 import cn.luijp.escserver.model.dto.CategoriesAllDto;
 import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.Categories;
-import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.model.vo.PostCategoriesWithCategoriesVo;
 import cn.luijp.escserver.service.controller.CategoriesControllerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class CategoriesController {
     @GetMapping("/alias/{categoryAlias}")
     public ResponseDto<Categories> getCategoriesByTagAlias(@PathVariable String categoryAlias) {
         Categories categoryIdByAlias = categoriesControllerService.getCategoryIdByAlias(categoryAlias);
-        if(categoryIdByAlias == null){
+        if (categoryIdByAlias == null) {
             return ResponseDto.error(-404, "Category not exist");
         }
         return ResponseDto.successWithData(categoryIdByAlias);

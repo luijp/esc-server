@@ -6,8 +6,6 @@ import cn.luijp.escserver.mapper.PostTagsMapper;
 import cn.luijp.escserver.model.dto.PostsListDto;
 import cn.luijp.escserver.model.dto.PostsWithTC;
 import cn.luijp.escserver.model.entity.*;
-import cn.luijp.escserver.model.vo.PostCategoriesWithCategoriesVo;
-import cn.luijp.escserver.model.vo.PostTagsWithTagsVo;
 import cn.luijp.escserver.service.controller.PostsControllerService;
 import cn.luijp.escserver.service.db.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -104,7 +102,6 @@ public class PostsControllerServiceImpl implements PostsControllerService {
         if (visible == 2) {
             postsQueryWrapper.in(Posts::getVisible, Arrays.asList(1, 2));
         } else if (visible == -1) {
-            ;
         } else {
             postsQueryWrapper.eq(Posts::getVisible, visible);
         }

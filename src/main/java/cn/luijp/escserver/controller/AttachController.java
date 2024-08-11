@@ -52,7 +52,7 @@ public class AttachController {
         response.reset();
         response.setContentType("image/png");
 //        response.setHeader("Content-Disposition", "attachment; filename=\"" + attachControllerService.getOriginName(uuid) + "\"");
-        attachControllerService.get(uuid,response);
+        attachControllerService.get(uuid, response);
     }
 
     @GetMapping("/download/{uuid}")

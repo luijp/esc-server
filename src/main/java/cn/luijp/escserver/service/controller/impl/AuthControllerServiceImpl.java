@@ -97,7 +97,7 @@ public class AuthControllerServiceImpl implements AuthControllerService {
     public Boolean checkRate(String ip) {
         LocalDateTime oneDayBefore = LocalDateTime.now().minus(Duration.ofDays(1));
         LambdaQueryWrapper<LoginFailed> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.gt(LoginFailed::getCreateTime,oneDayBefore).eq(LoginFailed::getIp, ip);
+        queryWrapper.gt(LoginFailed::getCreateTime, oneDayBefore).eq(LoginFailed::getIp, ip);
         List<LoginFailed> loginFailedList = loginFailedService.list(queryWrapper);
         return loginFailedList.size() < 30;
     }

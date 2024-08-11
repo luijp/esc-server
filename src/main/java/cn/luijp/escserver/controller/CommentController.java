@@ -20,25 +20,25 @@ public class CommentController {
 
     @GetMapping("/list/{postId}/{pageNum}/{pageSize}")
     public ResponseDto<CommentListDto> listVisible(@PathVariable Long postId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
-        CommentListDto comment = commentControllerService.getComment(postId, pageNum, pageSize,true);
+        CommentListDto comment = commentControllerService.getComment(postId, pageNum, pageSize, true);
         return ResponseDto.successWithData(comment);
     }
 
     @PostMapping("/listUnVisible/{postId}/{pageNum}/{pageSize}")
     public ResponseDto<CommentListDto> listUnVisible(@PathVariable Long postId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
-        CommentListDto comment = commentControllerService.getComment(postId, pageNum, pageSize,false);
+        CommentListDto comment = commentControllerService.getComment(postId, pageNum, pageSize, false);
         return ResponseDto.successWithData(comment);
     }
 
     @PostMapping("/listAll/{postId}/{pageNum}/{pageSize}")
     public ResponseDto<CommentListDto> listAllByPostId(@PathVariable Long postId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
-        CommentListDto comment = commentControllerService.getComment(postId, pageNum, pageSize,null);
+        CommentListDto comment = commentControllerService.getComment(postId, pageNum, pageSize, null);
         return ResponseDto.successWithData(comment);
     }
 
     @PostMapping("/listAll/{pageNum}/{pageSize}")
     public ResponseDto<CommentListDto> listAll(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
-        CommentListDto comment = commentControllerService.getComment(null, pageNum, pageSize,null);
+        CommentListDto comment = commentControllerService.getComment(null, pageNum, pageSize, null);
         return ResponseDto.successWithData(comment);
     }
 

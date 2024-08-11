@@ -41,7 +41,7 @@ public class AuthController {
         if (clientIp == null || clientIp.isEmpty()) {
             clientIp = request.getRemoteAddr();
         }
-        if(!authControllerService.checkRate(clientIp)){
+        if (!authControllerService.checkRate(clientIp)) {
             throw new TooManyRequestException();
         }
         Login login = authControllerService.login(auth.getUsername(), auth.getPassword());

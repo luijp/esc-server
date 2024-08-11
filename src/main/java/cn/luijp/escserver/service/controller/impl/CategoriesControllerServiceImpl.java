@@ -4,10 +4,7 @@ import cn.luijp.escserver.mapper.PostCategoriesMapper;
 import cn.luijp.escserver.model.dto.CategoriesAllDto;
 import cn.luijp.escserver.model.entity.Categories;
 import cn.luijp.escserver.model.entity.PostCategories;
-import cn.luijp.escserver.model.entity.PostTags;
-import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.model.vo.PostCategoriesWithCategoriesVo;
-import cn.luijp.escserver.model.vo.PostTagsWithTagsVo;
 import cn.luijp.escserver.service.controller.CategoriesControllerService;
 import cn.luijp.escserver.service.db.ICategoriesService;
 import cn.luijp.escserver.service.db.IPostCategoriesService;
@@ -42,7 +39,7 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
 
     public List<CategoriesAllDto> getAllCategories() {
         List<Categories> list = categoriesService.list();
-        return getCategories(list,0L);
+        return getCategories(list, 0L);
     }
 
     public List<Categories> getCategoriesList() {
@@ -51,22 +48,22 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
 
     public Categories getCategoryIdByAlias(String categoryAlias) {
         LambdaQueryWrapper<Categories> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Categories::getAlias,categoryAlias);
+        queryWrapper.eq(Categories::getAlias, categoryAlias);
         return categoriesService.getOne(queryWrapper);
     }
 
     private List<CategoriesAllDto> getCategories(List<Categories> categoriesList, Long parentId) {
         List<CategoriesAllDto> categoriesAllDtoList = new ArrayList<>();
-        categoriesList.forEach((item)->{
-            if(Objects.equals(item.getParentId(), parentId)){
-                CategoriesAllDto categoriesAllDto =new CategoriesAllDto();
+        categoriesList.forEach((item) -> {
+            if (Objects.equals(item.getParentId(), parentId)) {
+                CategoriesAllDto categoriesAllDto = new CategoriesAllDto();
                 categoriesAllDto.setId(item.getId());
                 categoriesAllDto.setName(item.getName());
                 categoriesAllDto.setParentId(item.getParentId());
                 categoriesAllDto.setAlias(item.getAlias());
 
                 categoriesAllDtoList.add(categoriesAllDto);
-                List<CategoriesAllDto> childCategories = getCategories(categoriesList,item.getId());
+                List<CategoriesAllDto> childCategories = getCategories(categoriesList, item.getId());
                 categoriesAllDto.setChildren(childCategories);
             }
         });
@@ -83,7 +80,7 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
         }
         try {
             boolean status = categoriesService.saveOrUpdate(category);
-            if(status){
+            if (status) {
                 return category.getId();
             }
             return null;
@@ -113,12 +110,12 @@ public class CategoriesControllerServiceImpl implements CategoriesControllerServ
     public List<PostCategoriesWithCategoriesVo> getCategoriesByPostId(Long postId) {
         MPJLambdaWrapper<PostCategories> wrapper = JoinWrappers.lambda(PostCategories.class)
                 .selectAs(PostCategories::getId, PostCategoriesWithCategoriesVo::getPostCategoriesId)
-                .selectAs(PostCategories::getPostId,PostCategoriesWithCategoriesVo::getPostId)
-                .selectAs(PostCategories::getCategoryId,PostCategoriesWithCategoriesVo::getCategoryId)
-                .selectAs(Categories::getName,PostCategoriesWithCategoriesVo::getCategoryName)
-                .selectAs(Categories::getAlias,PostCategoriesWithCategoriesVo::getCategoryAlias)
+                .selectAs(PostCategories::getPostId, PostCategoriesWithCategoriesVo::getPostId)
+                .selectAs(PostCategories::getCategoryId, PostCategoriesWithCategoriesVo::getCategoryId)
+                .selectAs(Categories::getName, PostCategoriesWithCategoriesVo::getCategoryName)
+                .selectAs(Categories::getAlias, PostCategoriesWithCategoriesVo::getCategoryAlias)
                 .leftJoin(Categories.class, Categories::getId, PostCategories::getCategoryId)
                 .eq(PostCategories::getPostId, postId);
-        return postCategoriesMapper.selectJoinList(PostCategoriesWithCategoriesVo.class,wrapper);
+        return postCategoriesMapper.selectJoinList(PostCategoriesWithCategoriesVo.class, wrapper);
     }
 }

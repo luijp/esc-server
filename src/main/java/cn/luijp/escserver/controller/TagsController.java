@@ -1,7 +1,6 @@
 package cn.luijp.escserver.controller;
 
 import cn.luijp.escserver.model.dto.ResponseDto;
-import cn.luijp.escserver.model.entity.Categories;
 import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.model.vo.PostTagsWithTagsVo;
 import cn.luijp.escserver.service.controller.TagsControllerService;
@@ -34,7 +33,7 @@ public class TagsController {
     @GetMapping("/alias/{tagAlias}")
     public ResponseDto<Tags> getTagsByTagAlias(@PathVariable String tagAlias) {
         Tags tagIdByAlias = tagsControllerService.getTagIdByAlias(tagAlias);
-        if(tagIdByAlias == null){
+        if (tagIdByAlias == null) {
             return ResponseDto.error(-404, "Tag not exist");
         }
         return ResponseDto.successWithData(tagIdByAlias);

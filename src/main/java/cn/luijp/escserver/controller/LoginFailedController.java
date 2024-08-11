@@ -22,7 +22,7 @@ public class LoginFailedController {
     }
 
     @PostMapping("/list")
-    public ResponseDto<List<LoginFailed>> list(){
+    public ResponseDto<List<LoginFailed>> list() {
         return ResponseDto.successWithData(loginFailedControllerService.getLoginFailed());
     }
 }

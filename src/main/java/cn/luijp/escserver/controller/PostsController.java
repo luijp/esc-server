@@ -105,17 +105,17 @@ public class PostsController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseDto<Posts> get(@PathVariable Long id,HttpServletRequest request) {
+    public ResponseDto<Posts> get(@PathVariable Long id, HttpServletRequest request) {
         Posts post = postsControllerService.getPost(id);
-        if(post == null){
+        if (post == null) {
             return ResponseDto.error(-404, "Post not found");
         }
         Login auth = authControllerService.auth(request);
         if (auth == null) {
-            if(post.getVisible() != 1){
+            if (post.getVisible() != 1) {
                 return ResponseDto.error(-403, "Auth required");
             }
-            if(post.getEncrypt() != null && !post.getEncrypt().isEmpty()){
+            if (post.getEncrypt() != null && !post.getEncrypt().isEmpty()) {
                 return ResponseDto.error(-403, "Auth required");
             }
         }
@@ -124,18 +124,18 @@ public class PostsController {
 
     @PostMapping("/get/{id}")
     public ResponseDto<Posts> getEncrypt(@PathVariable Long id,
-                                  @RequestBody String encrypt,
-                                  HttpServletRequest request) {
+                                         @RequestBody String encrypt,
+                                         HttpServletRequest request) {
         Posts post = postsControllerService.getPost(id);
-        if(post == null){
+        if (post == null) {
             return ResponseDto.error(-404, "Post not found");
         }
         Login auth = authControllerService.auth(request);
         if (auth == null) {
-            if(post.getVisible() != 1){
+            if (post.getVisible() != 1) {
                 return ResponseDto.error(-403, "Auth required");
             }
-            if(!Objects.equals(post.getEncrypt(), encrypt)){
+            if (!Objects.equals(post.getEncrypt(), encrypt)) {
                 return ResponseDto.error(-403, "Password not match");
             }
         }

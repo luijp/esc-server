@@ -2,7 +2,6 @@ package cn.luijp.escserver.service.controller.impl;
 
 
 import cn.luijp.escserver.mapper.PostTagsMapper;
-import cn.luijp.escserver.model.dto.ResponseDto;
 import cn.luijp.escserver.model.entity.PostTags;
 import cn.luijp.escserver.model.entity.Tags;
 import cn.luijp.escserver.model.vo.PostTagsWithTagsVo;
@@ -15,7 +14,6 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.HTML;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,7 +44,7 @@ public class TagsControllerServiceImpl implements TagsControllerService {
         }
         try {
             boolean status = tagsService.saveOrUpdate(tag);
-            if(status){
+            if (status) {
                 return tag.getId();
             }
             return null;
@@ -75,19 +73,19 @@ public class TagsControllerServiceImpl implements TagsControllerService {
 
     public List<PostTagsWithTagsVo> getTagsByPostId(Long postId) {
         MPJLambdaWrapper<PostTags> wrapper = JoinWrappers.lambda(PostTags.class)
-                .selectAs(PostTags::getId,PostTagsWithTagsVo::getPostTagsId)
-                .selectAs(PostTags::getPostId,PostTagsWithTagsVo::getPostId)
-                .selectAs(PostTags::getTagId,PostTagsWithTagsVo::getTagId)
-                .selectAs(Tags::getName,PostTagsWithTagsVo::getTagName)
-                .selectAs(Tags::getAlias,PostTagsWithTagsVo::getTagAlias)
+                .selectAs(PostTags::getId, PostTagsWithTagsVo::getPostTagsId)
+                .selectAs(PostTags::getPostId, PostTagsWithTagsVo::getPostId)
+                .selectAs(PostTags::getTagId, PostTagsWithTagsVo::getTagId)
+                .selectAs(Tags::getName, PostTagsWithTagsVo::getTagName)
+                .selectAs(Tags::getAlias, PostTagsWithTagsVo::getTagAlias)
                 .leftJoin(Tags.class, Tags::getId, PostTags::getTagId)
                 .eq(PostTags::getPostId, postId);
-        return postTagsMapper.selectJoinList(PostTagsWithTagsVo.class,wrapper);
+        return postTagsMapper.selectJoinList(PostTagsWithTagsVo.class, wrapper);
     }
 
     public Tags getTagIdByAlias(String tagAlias) {
         LambdaQueryWrapper<Tags> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Tags::getAlias,tagAlias);
+        wrapper.eq(Tags::getAlias, tagAlias);
         return tagsService.getOne(wrapper);
     }
 }

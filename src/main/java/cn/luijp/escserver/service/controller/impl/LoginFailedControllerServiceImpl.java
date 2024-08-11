@@ -24,9 +24,9 @@ public class LoginFailedControllerServiceImpl implements LoginFailedControllerSe
     public List<LoginFailed> getLoginFailed() {
         LambdaQueryWrapper<LoginFailed> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByDesc(LoginFailed::getId);
-        IPage<LoginFailed> loginFailedPage = loginFailedService.page(new Page<>(1,10),queryWrapper);
+        IPage<LoginFailed> loginFailedPage = loginFailedService.page(new Page<>(1, 10), queryWrapper);
         List<LoginFailed> records = loginFailedPage.getRecords();
-        if(records.isEmpty()) {
+        if (records.isEmpty()) {
             return null;
         }
         return records;
