@@ -104,8 +104,17 @@ public class PostsController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseDto<Posts> get(@PathVariable Long id) {
+    public ResponseDto<Posts> get(@PathVariable Long id,HttpServletRequest request) {
         Posts post = postsControllerService.getPost(id);
+        if(post == null){
+            return ResponseDto.error(-404, "Post not found");
+        }
+        Login auth = authControllerService.auth(request);
+        if (auth == null) {
+            if(post.getVisible() != 1){
+                return ResponseDto.error(-403, "Auth required");
+            }
+        }
         return ResponseDto.successWithData(post);
     }
 
