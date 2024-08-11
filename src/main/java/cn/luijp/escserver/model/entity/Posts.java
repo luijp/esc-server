@@ -30,7 +30,7 @@ public class Posts {
     private LocalDateTime updateTime;
 
     /**
-     * 是否隐藏，0:隐藏，1:显示，2:登录可见
+     * 是否隐藏，-1:全部，0:隐藏，1:显示，2:登录可见
      */
     private Integer visible;
 
@@ -40,7 +40,7 @@ public class Posts {
     private String encrypt;
 
     /**
-     * 1:文章，2:页面，3:碎语
+     * 1:文章，2:页面，3:碎语, 4:相册
      */
     private Integer type;
 
