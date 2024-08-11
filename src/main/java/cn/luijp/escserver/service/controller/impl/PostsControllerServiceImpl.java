@@ -149,7 +149,12 @@ public class PostsControllerServiceImpl implements PostsControllerService {
             PostsWithTC pwt = new PostsWithTC();
             pwt.setId(item.getId());
             pwt.setTitle(item.getTitle());
-            pwt.setContent("");
+
+            //列碎语需要 content
+            if(type == 3){
+                pwt.setContent(item.getContent());
+            }
+
             pwt.setSummary(item.getSummary());
             pwt.setCreateTime(item.getCreateTime());
             pwt.setUpdateTime(item.getUpdateTime());

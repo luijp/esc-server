@@ -33,7 +33,7 @@ public class PostsController {
                                           HttpServletRequest request
     ) {
         Login auth = authControllerService.auth(request);
-        Integer visible = 1;
+        int visible = 1;
         if (auth != null) {
             visible = 2;
         }
@@ -47,7 +47,7 @@ public class PostsController {
                                               HttpServletRequest request
     ) {
         Login auth = authControllerService.auth(request);
-        Integer visible = 1;
+        int visible = 1;
         if (auth != null) {
             visible = 2;
         }
@@ -62,7 +62,7 @@ public class PostsController {
                                                  HttpServletRequest request
     ) {
         Login auth = authControllerService.auth(request);
-        Integer visible = 1;
+        int visible = 1;
         if (auth != null) {
             visible = 2;
         }
@@ -77,7 +77,7 @@ public class PostsController {
                                                       HttpServletRequest request
     ) {
         Login auth = authControllerService.auth(request);
-        Integer visible = 1;
+        int visible = 1;
         if (auth != null) {
             visible = 2;
         }
