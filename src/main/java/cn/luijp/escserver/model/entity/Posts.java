@@ -40,7 +40,7 @@ public class Posts {
     private String encrypt;
 
     /**
-     * 1:文章，2:页面
+     * 1:文章，2:页面，3:碎语
      */
     private Integer type;
 
