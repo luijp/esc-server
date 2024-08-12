@@ -66,10 +66,10 @@ public class BackupControllerServiceImpl implements BackupControllerService {
                 dest.getParentFile().mkdirs();
             }
             String command = String.format(
-                    "mysqldump -h%s -u%s -p%s %s > %s",
+                    "\"C:\\Program Files\\MariaDB 11.5\\bin\\mysqldump.exe\" -h%s -u%s -p%s %s > %s",
                     DBHost, DBUser, DBPwd, DBName, BackupFolder + "/db" + Instant.now().getEpochSecond() + ".sql"
             );
-            Process process = Runtime.getRuntime().exec(command);
+            Process process = Runtime.getRuntime().exec(new String[]{"sh", "/c", command});
             process.waitFor(); // 等待命令执行完成
             return true;
         } catch (Exception e) {
