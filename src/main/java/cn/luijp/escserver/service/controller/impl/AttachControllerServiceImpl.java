@@ -5,6 +5,7 @@ import cn.luijp.escserver.model.dto.AttachListDto;
 import cn.luijp.escserver.model.entity.Attach;
 import cn.luijp.escserver.service.controller.AttachControllerService;
 import cn.luijp.escserver.service.db.IAttachService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.servlet.http.HttpServletResponse;
@@ -74,7 +75,9 @@ public class AttachControllerServiceImpl implements AttachControllerService {
 
     @Override
     public AttachListDto list(Integer pageNum, Integer pageSize) {
-        IPage<Attach> attachPage = attachService.page(new Page<>(pageNum, pageSize));
+        LambdaQueryWrapper<Attach> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Attach::getCreateTime);
+        IPage<Attach> attachPage = attachService.page(new Page<>(pageNum, pageSize), queryWrapper);
         List<Attach> attachList = attachPage.getRecords();
         AttachListDto attachListDto = new AttachListDto();
         attachListDto.setTotal(attachPage.getTotal());
