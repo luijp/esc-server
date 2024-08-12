@@ -51,6 +51,7 @@ public class AttachController {
     public void image(HttpServletResponse response, @PathVariable String uuid) {
         response.reset();
         response.setContentType("image/png");
+        response.setHeader("Cache-Control", "public, max-age=604800");
 //        response.setHeader("Content-Disposition", "attachment; filename=\"" + attachControllerService.getOriginName(uuid) + "\"");
         attachControllerService.get(uuid, response);
     }
