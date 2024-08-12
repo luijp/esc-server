@@ -28,7 +28,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SSH }}
           ARGS: "-rlgoDzvc -i --delete"
           SOURCE: "target/"
-          EXCLUDE: "application.yml , run_jar.sh, /upload"
+          EXCLUDE: "application.yml , run_jar.sh, /upload, /backup"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.REMOTE_TARGET }}

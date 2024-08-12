@@ -69,9 +69,7 @@ public class BackupControllerServiceImpl implements BackupControllerService {
                     "mysqldump -h%s -u%s -p%s %s > %s",
                     DBHost, DBUser, DBPwd, DBName, BackupFolder + "/db" + Instant.now().getEpochSecond() + ".sql"
             );
-            String[] cmdArray = {"bash", "/c", command};
-//            String[] cmdArray = {"cmd.exe", "/c", command};
-            Process process = Runtime.getRuntime().exec(cmdArray);
+            Process process = Runtime.getRuntime().exec(command);
             process.waitFor(); // 等待命令执行完成
             return true;
         } catch (Exception e) {
