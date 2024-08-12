@@ -66,7 +66,7 @@ public class BackupControllerServiceImpl implements BackupControllerService {
                 dest.getParentFile().mkdirs();
             }
             String command = String.format(
-                    "mysqldump -h%s -u%s -p%s %s > %s",
+                    "/usr/bin/mysqldump -h%s -u%s -p%s %s > %s",
                     DBHost, DBUser, DBPwd, DBName, BackupFolder + "/db" + Instant.now().getEpochSecond() + ".sql"
             );
             Process process = Runtime.getRuntime().exec(new String[]{"/usr/bin/bash", "/c", command});
