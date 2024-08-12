@@ -152,7 +152,7 @@ public class PostsControllerServiceImpl implements PostsControllerService {
             pwt.setTitle(item.getTitle());
 
             //列碎语需要 content
-            if(type == 3){
+            if (type == 3) {
                 pwt.setContent(item.getContent());
             }
 

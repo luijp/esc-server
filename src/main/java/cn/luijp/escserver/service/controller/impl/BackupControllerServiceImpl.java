@@ -1,9 +1,7 @@
 package cn.luijp.escserver.service.controller.impl;
 
-import cn.luijp.escserver.Exception.AttachFileNotFoundException;
 import cn.luijp.escserver.model.dto.BackupFileNameDto;
 import cn.luijp.escserver.service.controller.BackupControllerService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -11,8 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.file.Files;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,31 +39,6 @@ public class BackupControllerServiceImpl implements BackupControllerService {
     @Value("${esc.backup-dbhost}")
     private String DBHost;
 
-    public Boolean backupDatabase() {
-        try{
-            File dest = new File(BackupFolder + "/db");
-            if (!dest.getParentFile().exists()) {
-                dest.getParentFile().mkdirs();
-            }
-
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    "mysqldump",
-                    "-u", DBPwd,
-                    "-p", DBUser,
-                    "-h", DBHost,
-                    DBName,
-                    "-r", BackupFolder + "/db" + Instant.now().getEpochSecond() + ".sql");
-
-            Process process = processBuilder.start();
-            process.waitFor();
-
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     private static void zipDirectory(File folder, String parentFolder, ZipOutputStream zos) throws IOException {
         File[] files = folder.listFiles();
         for (File file : files) {
@@ -84,8 +59,29 @@ public class BackupControllerServiceImpl implements BackupControllerService {
         }
     }
 
+    public Boolean backupDatabase() {
+        try {
+            File dest = new File(BackupFolder + "/db");
+            if (!dest.getParentFile().exists()) {
+                dest.getParentFile().mkdirs();
+            }
+            String command = String.format(
+                    "mysqldump -h%s -u%s -p%s %s > %s",
+                    DBHost, DBUser, DBPwd, DBName, BackupFolder + "/db" + Instant.now().getEpochSecond() + ".sql"
+            );
+            String[] cmdArray = {"bash", "/c", command};
+//            String[] cmdArray = {"cmd.exe", "/c", command};
+            Process process = Runtime.getRuntime().exec(cmdArray);
+            process.waitFor(); // 等待命令执行完成
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public Boolean backupUpload() {
-        try{
+        try {
             String sourceDirPath = UploadFolder; // 要打包的目录路径
             String zipFilePath = BackupFolder + "/upload" + Instant.now().getEpochSecond() + ".zip"; // 输出的ZIP文件路径
 
@@ -100,7 +96,7 @@ public class BackupControllerServiceImpl implements BackupControllerService {
                 e.printStackTrace();
                 return false;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

@@ -16,3 +16,5 @@ esc:
   jwt-secret: RANDOM-SECRET
   upload-path: ./upload
   backup-path: ./backup
+  backup-db: esc
+  backup-dbhost: localhost
